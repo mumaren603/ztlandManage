@@ -1,0 +1,122 @@
+        body{
+            margin: 0 auto;
+            background-color: #dddddd;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+
+        .pg_header{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: darkcyan;
+            color: brown;
+            z-index: 10;
+        }
+
+        .pg_header .logo{
+            height: 50px;
+            width: 100px;
+        }
+
+        .pg_header .logo a img{
+            height: 50px;
+            width: 50px;
+        }
+
+        .pg_header .web_name {
+            position: relative;
+            width: 300px;
+            height: 50px;
+            text-align: left;
+            font-size: x-large;
+            line-height: 50px;
+            color: black;
+        }
+
+        .pg_header .person_info{
+            position: relative;
+            height: 50px;
+            width: 160px;
+        }
+        .pg_header .person_info img{
+            border: 0;
+            height: 50px;
+            width: 50px;
+            /*使用border-radius可以定义边框的圆角程度*/
+            border-radius: 50%;
+        }
+
+        .pg_header .person_info .info{
+            position: absolute;
+            width: 150px;
+            background-color: cornflowerblue;
+            top: 50px;
+            z-index: 20;
+            display: none;
+        }
+        .pg_header .person_info .info a{
+            display: block;
+            color: white;
+        }
+
+        .pg_header .person_info:hover .info{
+            display: block;
+        }
+
+        .pg_content .menu{
+            position: fixed;
+            top: 50px;
+            left: 0;
+            bottom: 0;
+            width: 200px;
+            background-color: black;
+            color: #dddddd;
+            opacity: 0.8;
+        }
+        .pg_content .content{
+            position: fixed;
+            top: 50px;
+            right: 0;
+            bottom: 0;
+            left: 200px;
+            background-color: #dddddd;
+            overflow: auto;
+            z-index: 8;
+        }
+
+        .pg_content .menu .menu_s{
+            width: 200px;
+            height: 48px;
+            text-align: center;
+            line-height: 48px;
+            border-bottom: 1px solid grey;
+        }
+
+        .pg_content .menu .content111{
+            width: 200px;
+            height: 50px;
+            text-align: center;
+            min-height: 50px;
+        }
+        .hide{
+            display: none;
+        }
+        .pg_content .menu .header{
+            background-color: cornflowerblue;
+            color: white;
+        }
+        .xxx{
+            background: brown;
+            color: blue;
+        }
+
+        .ww{
+            text-align: center;
+        }
