@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/static/css/common.css">
-    <!--子页面单独css-->
-    {% block link %} {% endblock %}
 </head>
 <body>
 <div class="pg_header">
@@ -15,64 +13,31 @@
         </a>
     </div>
     <div class="web_name left">
-        中天后台管理系统
+        江苏中天吉奥后台管理系统
     </div>
     <div class="person_info right">
         <img src="/static/img/person.jpg" alt="头像">
         <div class="info">
-            <a>我的信息</a>
-            <a>注销</a>
             <a>修改密码</a>
-            <a>修改头像</a>
+            <a>注销</a>
         </div>
     </div>
 </div>
 
 <div class="pg_content">
-         <div class="menu">
-             <div class="menu_s"><a href="/home/index">主页</a></div>
-             <div class="menu_s"><a href="/home/host">机器管理</a></div>
-             <div class="menu_s"><a href="/home/ipPool">IP池管理</a></div>
-             <div class="menu_s"><a href="#">xxx管理</a></div>
-         </div>
-
-        <div class="menu">
-            <div class="item">
-                <div class="header">主页</div>
-                <div class="content111">主页</div>
-            </div>
-            <div class="item">
-                <div class="header">主机管理</div>
-                <div class="content111">主机管理</div>
-            </div>
-            <div class="item">
-                <div class="header">IP管理</div>
-                <div class="content111">IP查询</div>
-                <div class="content111">IP新增</div>
-                <div class="content111">IP修改</div>
-                <div class="xxx">IP删除</div>
-            </div>
-            <div class="item">
-                <div class="header">xxx管理</div>
-                <div class="content111">xxx管理</div>
-            </div>
-        </div>
-
     <div class="menu">
-        <div>
-            <div>菜单</div>
-            <div class="ww">内容</div>
-        </div>
-
+        <div class="menu_s"><a href="/home">主页</a></div>
+        <div class="menu_s"><a href="/env">环境管理</a></div>
+        <div class="menu_s">主机管理</div>
+        <div class="menu_s">IP池管理</div>
     </div>
-    <div class="content">
-        <!--子页面单独内容-->
-        {% block content %} {% endblock %}
-    </div>
+    <div class="content">胜多负少的方式</div>
 </div>
-<div class="pg_footer"></div>
+
+<div class="pg_footer">Copyright © 2020 江苏中天吉奥科技有限公司</div>
+
+
 <script src="/static/js/jquery.min.js"></script>
-{% block js %}{% endblock %}
 <script>
     $(".header").click(function () {
         $(this).next().removeClass('hide').parent().siblings().find('.content').addClass('hide');

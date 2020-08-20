@@ -13,6 +13,7 @@
             position: fixed;
             top: 0;
             left: 0;
+            right：0;
             width: 100%;
             height: 50px;
             background-color: darkcyan;
@@ -74,7 +75,7 @@
             position: fixed;
             top: 50px;
             left: 0;
-            bottom: 0;
+            bottom: 35px;
             width: 200px;
             background-color: black;
             color: #dddddd;
@@ -84,7 +85,7 @@
             position: fixed;
             top: 50px;
             right: 0;
-            bottom: 0;
+            bottom: 35px;
             left: 200px;
             background-color: #dddddd;
             overflow: auto;
@@ -99,12 +100,6 @@
             border-bottom: 1px solid grey;
         }
 
-        .pg_content .menu .content111{
-            width: 200px;
-            height: 50px;
-            text-align: center;
-            min-height: 50px;
-        }
         .hide{
             display: none;
         }
@@ -112,11 +107,15 @@
             background-color: cornflowerblue;
             color: white;
         }
-        .xxx{
-            background: brown;
-            color: blue;
-        }
 
-        .ww{
+        .pg_footer{
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 30px;
+            line-height: 30px;
             text-align: center;
+            background: brown;
+            z-index: 10;
         }

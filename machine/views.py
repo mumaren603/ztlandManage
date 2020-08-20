@@ -19,5 +19,14 @@ def index(request):
     if request.session.get('is_login',None):
         return render(request,'index.html',{'user':request.session.get('username',None)})
     else:
-        return HttpResponse('ERROR')
+        return render(request,'login.html')
 
+# 主页
+def home(request):
+    if request.method == 'GET':
+        return render(request,'home.html')
+
+#环境信息
+def env(request):
+    if request.method == 'GET':
+        return render(request,'env.html')
