@@ -1,0 +1,526 @@
+{% extends "index.html" %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/envDetail.css">
+{% endblock %}
+
+{% block content %}
+    <!--遮罩层-->
+    <div class="shadow hide"></div>
+    <!--前端、后端、微服务、FTP编辑弹窗界面-->
+    <div class="edit_env_div hide">
+        <div class="edit_div_body">
+            <form id="edit_env_form">
+                <div class="edit_tr">
+                    <!--编辑框页面数据ID,编辑框隐藏-->
+                    <div style="display: none">
+                        <input type="text" name="s_id">
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>服务名：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="service_chinese_name">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>服务标识：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="service_name">
+                        </div>
+                </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>主机IP：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="service_host">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>服务端口：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="service_port">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>访问地址：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input style="width: 400px;" type="text" name="service_url">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>部署包路径：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input style="width: 400px;" type="text" name="service_deploy_path">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>所属节点：</label>
+                        </div>
+                        <div class="edit_c">
+                            <select name="service_model">
+                                <option value="前端">前端服务</option>
+                                <option value="后端">后端服务</option>
+                                <option value="微服务">微服务</option>
+                                <option value="FTP">FTP服务</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="edit_div_footer">
+            <input id="editEnvConfirmBtn" type="button" value="确定">
+            <input id="editEnvCancelBtn" type="button" value="取消">
+        </div>
+    </div>
+    <!--数据库编辑弹窗信息-->
+    <div class="edit_db_div hide">
+        <div class="edit_div_body">
+            <form id="edit_db_form">
+                <div class="edit_tr">
+                    <div style="display: none">
+                        <input type="text" name="db_id">
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>数据库IP：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="db_ip">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>数据库端口：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="db_port">
+                        </div>
+                </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>数据库实例：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="db_sid">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>数据库名称：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="db_name">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>用户名：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="db_user">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>密码：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="db_password">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="edit_div_footer">
+            <input id="editDbConfirmBtn" type="button" value="确定">
+            <input id="editDbCancelBtn" type="button" value="取消">
+        </div>
+    </div>
+    <!--编辑弹出框校验信息弹出框 -->
+    <div class="verfity_div hide">
+        <div id="tips"></div>
+        <div id="verfityInfo"></div>
+    </div>
+    <!--删除弹出框-->
+    <div class="del_div hide">
+        <div style="height: 25%"></div>
+        <div style="height: 50%;text-align: center;font-size: large">确定删除吗？</div>
+        <div style="height: 25%">
+            <form id="del_div" action="/envDel-{{ row.s_id  }}" method="post">
+                <input style="width: 50%;float:left;" type="button" id="del_div_confirm" value="确定">
+                <input style="width: 50%;float:left;" type="button" id="del_div_cancel" value="取消">
+            </form>
+        </div>
+    </div>
+    <!--添加服务信息-->
+    <div class="add_env_div hide">
+        <div class="add_div_body">
+            <form id="addEnvForm">
+                <div class="add_tr">
+                    <!--后端传过来的主表的m_id,添加信息提交给后端需要传该参数，完成详细信息和主表信息关联-->
+                    <div style="display: none">
+                        <input type="text" name="env_node_id" value="{{ env_node_id }}">
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>服务名：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="service_chinese_name">
+                        </div>
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>服务标识：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="service_name">
+                        </div>
+                </div>
+                </div>
+                <div class="add_tr">
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>主机IP：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="service_host">
+                        </div>
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>服务端口：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="service_port">
+                        </div>
+                    </div>
+                </div>
+                <div class="add_tr">
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label>访问地址：</label>
+                        </div>
+                        <div class="add_c">
+                            <input style="width: 400px;" type="text" name="service_url">
+                        </div>
+                    </div>
+                </div>
+                <div class="add_tr">
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label>部署包路径：</label>
+                        </div>
+                        <div class="add_c">
+                            <input style="width: 400px;" type="text" name="service_deploy_path">
+                        </div>
+                    </div>
+                </div>
+                <div class="add_tr">
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>所属节点：</label>
+                        </div>
+                        <div class="add_c">
+                            <select name="service_model">
+                                <option value="前端">前端服务</option>
+                                <option value="后端">后端服务</option>
+                                <option value="微服务">微服务</option>
+                                <option value="FTP">FTP服务</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="add_div_server_footer">
+            <input id="addEnvConfirmBtn" type="button" value="保存">
+            <input id="addEnvCancelBtn" type="button" value="取消">
+        </div>
+    </div>
+    <!--添加数据库信息-->
+    <div class="add_db_div hide">
+        <div class="add_div_body">
+            <form id="addDbForm">
+                <div class="add_tr">
+                    <div style="display: none">
+                        <input type="text" name="env_node_id" value="{{ env_node_id }}">
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>数据库IP：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="db_ip">
+                        </div>
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>数据库端口：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="db_port">
+                        </div>
+                </div>
+                </div>
+                <div class="add_tr">
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>数据库实例：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="db_sid">
+                        </div>
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label>数据库名称：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="db_name">
+                        </div>
+                    </div>
+                </div>
+                <div class="add_tr">
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>用户名：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="db_user">
+                        </div>
+                    </div>
+                    <div class="add_td">
+                        <div class="add_h">
+                            <label><i style="color: red">*</i>密码：</label>
+                        </div>
+                        <div class="add_c">
+                            <input type="text" name="db_password">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="add_div_db_footer">
+            <input id="addDbConfirmBtn" type="button" value="保存">
+            <input id="addDbCancelBtn" type="button" value="取消">
+        </div>
+    </div>
+
+    <!--内容-->
+    <div class="content">
+        <div class="content_b">
+            <div class="content_add" auth="{{ auth }}">
+                <input id="addDbDetailBtn" style="display: none" type="button" value="添加数据库信息">
+                <input id="addEnvDetailBtn" style="display: none" type="button" value="添加服务信息">
+            </div>
+
+            <div class="content_b_m" style="width: 100%">
+                <div class="menu_item left active" a="1">前端信息</div>
+                <div class="menu_item left" a="2">后端信息</div>
+                <div class="menu_item left" a="3">微服务信息</div>
+                <div class="menu_item left" a="4">FTP信息</div>
+                <div class="menu_item left" a="5">数据库信息</div>
+            </div>
+
+            <div class="content_b_c">
+                <div b="1">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="3%">序号</th>
+                                <th width="8%">服务名</th>
+                                <th width="8%">服务标识</th>
+                                <th width="8%">主机IP</th>
+                                <th width="8%">服务端口</th>
+                                <th width="10%">访问地址</th>
+                                <th width="20%">部署包路径</th>
+                                <th width="8%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in frontService %}
+                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">
+                                <td>{{ forloop.counter }}</td>
+                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>
+                                <td name="service_name">{{ row.service_name }}</td>
+                                <td name="service_host">{{ row.service_host }}</td>
+                                <td name="service_port">{{ row.service_port }}</td>
+                                <td name="service_url">{{ row.service_url }}</td>
+                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
+                                <td>
+                                    <input class="edit_env_btn" style="display: none" type="button" value="编辑">
+                                    <a href="/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+    {#                              <input class="del_btn" type="button" hid={{ row.s_id  }} value="删除">#}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="hide" b="2">
+                    <table>
+                    <thead>
+                        <tr>
+                            <th width="3%">序号</th>
+                            <th width="8%">服务名</th>
+                            <th width="8%">服务标识</th>
+                            <th width="8%">主机IP</th>
+                            <th width="8%">服务端口</th>
+                            <th width="10%">访问地址</th>
+                            <th width="20%">部署包路径</th>
+                            <th width="8%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in backService %}
+                        <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td name="service_chinese_name">{{ row.service_chinese_name }}</td>
+                            <td name="service_name">{{ row.service_name }}</td>
+                            <td name="service_host">{{ row.service_host }}</td>
+                            <td name="service_port">{{ row.service_port }}</td>
+                            <td name="service_url">{{ row.service_url }}</td>
+                            <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
+                            <td>
+                                <input class="edit_env_btn" style="display: none" type="button" value="编辑">
+                                <a href="/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <div class="hide" b="3">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="3%">序号</th>
+                                <th width="8%">服务名</th>
+                                <th width="8%">服务标识</th>
+                                <th width="8%">主机IP</th>
+                                <th width="8%">服务端口</th>
+                                <th width="10%">访问地址</th>
+                                <th width="20%">部署包路径</th>
+                                <th width="8%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in microService %}
+                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">
+                                <td>{{ forloop.counter }}</td>
+                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>
+                                <td name="service_name">{{ row.service_name }}</td>
+                                <td name="service_host">{{ row.service_host }}</td>
+                                <td name="service_port">{{ row.service_port }}</td>
+                                <td name="service_url">{{ row.service_url }}</td>
+                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
+                                <td>
+                                    <input class="edit_env_btn" style="display: none" type="button" value="编辑">
+                                    <a href="/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="hide" b="4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="3%">序号</th>
+                                <th width="8%">服务名</th>
+                                <th width="8%">服务标识</th>
+                                <th width="8%">主机IP</th>
+                                <th width="8%">服务端口</th>
+                                <th width="10%">访问地址</th>
+                                <th width="20%">登录口令</th>
+                                <th width="8%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in FtpService %}
+                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">
+                                <td>{{ forloop.counter }}</td>
+                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>
+                                <td name="service_name">{{ row.service_name }}</td>
+                                <td name="service_host">{{ row.service_host }}</td>
+                                <td name="service_port">{{ row.service_port }}</td>
+                                <td name="service_url">{{ row.service_url }}</td>
+                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
+                                <td>
+                                    <input class="edit_env_btn" style="display: none" type="button" value="编辑">
+                                    <a href="/env/delEnv-{{ row.s_id }}"><button type="button" class="del_env_btn" style="display: none">删除</button></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="hide" b="5">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="3%">序号</th>
+                                <th width="15%">库名</th>
+                                <th width="10%">数据库IP</th>
+                                <th width="10%">数据库端口</th>
+                                <th width="10%">数据库实例</th>
+                                <th width="10%">用户名</th>
+                                <th width="15%">密码</th>
+                                <th width="15%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in dbService %}
+                            <tr hid="{{ row.db_id}}">
+                                <td>{{ forloop.counter }}</td>
+                                <td name="db_password">{{ row.name }}</td>
+                                <td name="db_ip">{{ row.ip }}</td>
+                                <td name="db_port">{{ row.port }}</td>
+                                <td name="db_sid">{{ row.sid }}</td>
+                                <td name="db_name">{{ row.user }}</td>
+                                <td name="db_user">{{ row.password }}</td>
+                                <td>
+                                    <input class="edit_db_btn" style="display: none" type="button" value="编辑">
+                                    <a href="/env/delDb-{{ row.db_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/envDetail.js"></script>
+{% endblock %}
+
+

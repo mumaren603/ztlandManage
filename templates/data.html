@@ -1,0 +1,214 @@
+{% extends "index.html" %}
+{% block css %}
+    <link rel="stylesheet" href="/static/css/env.css">
+    <link rel="stylesheet" href="/static/css/data.css">
+{% endblock %}
+
+{% block content %}
+    <div class="data">
+        <form id="queryForm">
+            <table>
+                <tr>
+                    <td style="width: 10%">所属环境：</td>
+                    <td style="float: left">
+                        <select name="env">
+                            <option value="wx">无锡环境</option>
+                            <option value="tz">泰州环境</option>
+                            <option value="yx">宜兴环境</option>
+                            <option value="sq">宿迁环境</option>
+                            <option value="bt">包头环境</option>
+                            <option value="xh">兴化环境</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>所属产权：</td>
+                    <td style="float: left">
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="jd">净地
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="fw" checked="checked">房屋
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="gjpt">公建配套
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="zjgc">在建工程
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="zjfw">自建房屋
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="ck">车库
+                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="xmldz">项目类多幢
+                    </td>
+                </tr>
+                <tr>
+                    <td>登记类型：</td>
+                    <td style="float: left">
+                        <input style="width: 20px;height: 20px; " type="radio" name="djlx" value="dj_1">首次登记
+                        <input style="width: 20px;height: 20px; " type="radio" name="djlx" value="dj_2"
+                               checked="checked">转移/变更/注销
+                    </td>
+                </tr>
+                <tr>
+                    <td>限制信息：</td>
+                    <td style="float: left">
+                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
+                               value="sfdy">抵押
+                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
+                               value="sfcf">查封
+                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
+                               value="sfyg">预告
+                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
+                               value="sfyy">异议
+                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
+                               value="sfydy">预抵押
+                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
+                               value="sfycf">预查封
+                    </td>
+                </tr>
+                <tr>
+                    <td>是否批量：</td>
+                    <td style="float: left">
+                        <input style="width: 20px;height: 20px; " type="radio" name="sfpl" value="y">是
+                        <input style="width: 20px;height: 20px; " type="radio" name="sfpl" value="n"
+                               checked="checked">否
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="queryBtn"  class="queryBtn" type="button" value="查询">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <!--遮罩层-->
+        <div class="shadow hide"></div>
+        <!--查询结果弹窗界面-->
+        <div id="resTab" class="res_div hide">
+            <div class="res_div_body">
+                <div class="content">
+                    <div class="res_tr">
+                        <div class="res_td_n">不动产单元号：</div>
+                        <div class="res_td_v" id="bdcdyh"></div>
+                    </div>
+                    <div class="res_tr">
+                        <div class="res_td_n">宗地（房屋）代码：</div>
+                        <div class="res_td_v" id="zddmOrFwdm"></div>
+                    </div>
+                    <div class="res_tr">
+                        <div class="res_td_n">不动产证书（明）：</div>
+                        <div class="res_td_v" id="bdcqzsOrZm"></div>
+                    </div>
+                    <div class="res_tr2">
+                        <div class="res_td_n2">土地（房屋）坐落：</div>
+                        <div class="res_td_v2" id="tdOrFwzl"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="res_div_middle">
+                <div style="margin-left: 10px;">注：车库位首次，批量首次，在建工程抵押流程查询结果为幢相关数据。公建配套查询结果为宗地相关数据。</div>
+            </div>
+            <div class="res_div_footer">
+                <button id="closeBtn" class="closeBtn">关闭</button>
+            </div>
+        </div>
+
+        <!--查询信息弹出框 -->
+        <div class="verfity_div hide">
+            <div id="tips"></div>
+            <div id="verfityInfo"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/env.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script>
+        //查询结果弹出框关闭 并清空页面数据
+        $('#closeBtn').click(function(){
+            $('#bdcdyh').html()
+            $('#zddmOrFwdm').html()
+            $('#bdcqzsOrZm').html()
+            $('#tdOrFwzl').html()
+            $('#resTab').addClass('hide')
+        })
+
+        // 查询
+        $('#queryBtn').click(function () {
+
+            //将查询按钮置为不可编辑且背景色置灰色
+            $('#queryBtn').attr("disabled",true);
+            $('#queryBtn').attr("class","queryBtn2");
+
+            //获取页面请求值
+            var env = $('#queryForm').find('select[name="env"]').val()
+            var cq = $('input[type="radio"][name="cqmc"]:checked').val()
+            var djlx = $('input[type="radio"][name="djlx"]:checked').val()
+            // 获取复选框chekbox多个值
+            var xzxx = []
+            $('input[type="checkbox"][name="xzxx"]:checked').each(
+                function () {
+                    xzxx.push($(this).val())
+                }
+            )
+            var sfpl = $('input[type="radio"][name="sfpl"]:checked').val()
+            console.log("请求参数:env:%s cq:%s djlx:%s xzxx:%s sfpl:%s" ,env,cq,djlx,xzxx,sfpl)
+
+            if ((env == undefined || env == '' || env == null) && (cq == undefined || cq == '' || cq == null) && (djlx == undefined || djlx == '' || djlx == null) && (sfpl == undefined || sfpl == '' || sfpl == null)) {
+                // 查不到数据界面提示
+                $('.verfity_div').removeClass('hide')
+                $('#verfityInfo').text('请选择必填条件！')
+                // 弹出框提示3秒后消失
+                setTimeout(function () {
+                    $('.verfity_div').addClass('hide')
+                }, 3000)
+                $('#texts').html("")
+            } else {
+                $.ajax({
+                    url: '/data/',
+                    type: 'POST',
+                    data: $('#queryForm').serialize(),
+                    dataType: 'JSON',
+                    success: function (obj) {
+                        console.log('后端返回数据：', obj)
+                        if (obj){
+                            //后端有返回则将查询按钮置为可编辑且背景色置蓝色
+                            $('#queryBtn').attr("disabled",false);
+                            $('#queryBtn').attr("class","queryBtn");
+
+                            if (obj.status == 1) {
+                                if (obj.data != 'null'){
+                                    // 接口返回异常
+                                    $('.verfity_div').removeClass('hide')
+                                    $('#verfityInfo').text(obj.err_msg)
+                                    // 弹出框提示3秒后消失
+                                    setTimeout(function () {
+                                        $('.verfity_div').addClass('hide')
+                                    }, 3000)
+                                    $('#texts').html("")
+                                }
+                                else{
+                                    // 无数据返回
+                                    $('.verfity_div').removeClass('hide')
+                                    $('#verfityInfo').text(obj.err_msg)
+                                    // 弹出框提示3秒后消失
+                                    setTimeout(function () {
+                                        $('.verfity_div').addClass('hide')
+                                    }, 3000)
+                                    $('#texts').html("")
+                                }
+                            } else {
+                                bdcdyh = obj['data'][0]
+                                zddmOrFwdm = obj['data'][1]
+                                tdOrFwzl = obj['data'][2]
+                                cqzsOrZm = obj['data'][3]
+                                $('#bdcdyh').html(bdcdyh)
+                                $('#zddmOrFwdm').html(zddmOrFwdm)
+                                $('#bdcqzsOrZm').html(cqzsOrZm)
+                                $('#tdOrFwzl').html(tdOrFwzl)
+                                // 弹出框
+                                $('#resTab').removeClass('hide')
+                            }
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+{% endblock %}
+
+
+

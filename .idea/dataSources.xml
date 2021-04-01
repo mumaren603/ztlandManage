@@ -7,5 +7,14 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:D:\python\ztlandManage\db.sqlite3</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ztland@localhost" uuid="ae54eb76-6966-43cd-a71b-a7ca72dbb36d">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/ztland</jdbc-url>
+      <driver-properties>
+        <property name="serverTimezone" value="Hongkong" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>

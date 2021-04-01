@@ -3,13 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>登录页面</title>
+    <link rel="stylesheet" href="../static/css/login.css">
 </head>
 <body>
-    <form action="/login/" method="post">
+<div class="body">
+    <form id="login-form">
         {% csrf_token %}
-        用户名：<input type="text" name="username">
-        密码：<input type="password" name="password">
-        <input type="submit" value="登录">
+        <!--用户名-->
+        <div class="inputbox" id="account-box">
+            <div class="u-logo-img1"></div>
+            <input class="u-input" type="text" name="username">
+        </div>
+        <!--间隙-->
+        <div class="gap"></div>
+        <!--密码-->
+        <div class="inputbox" id="password-box">
+            <div class="u-logo-img2"></div>
+            <input class="u-input" type="text" name="password">
+        </div>
+        <!--间隙-->
+        <div class="gap"></div>
+        <!--checkbox-->
+        <div class="ch-box" >
+            <input class="checkbox-c" type="checkbox" name="login_remember" value="1">
+            <label class="checkbox-t">一周免登录</label>
+        </div>
+        <!--间隙-->
+        <div class="gap"></div>
+        <div class="login-btn">
+            <input id="loginBtn" type="button" value="登录">
+        </div>
     </form>
+    <div class="shadow hide"></div>
+    <div class="tips hide">
+        <div class="tips_head">提示<br></div>
+        <div class="tips_body"></div>
+        <div class="tips_footer"><button id="loginErrTipsBtn">关闭</button></div>
+    </div>
+</div>
+<script src="/static/js/jquery.min.js"></script>
+<script src="../static/js/login.js"></script>
 </body>
 </html>

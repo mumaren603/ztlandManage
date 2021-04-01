@@ -2,12 +2,23 @@
             margin: 0 auto;
             background-color: #dddddd;
         }
+
         .left{
             float: left;
         }
+
         .right{
             float: right;
         }
+
+        .hide{
+            display: none;
+        }
+
+        a{
+            text-decoration: none;
+            color: blue;
+	    }
 
         .pg_header{
             position: fixed;
@@ -16,8 +27,8 @@
             right：0;
             width: 100%;
             height: 50px;
-            background-color: darkcyan;
-            color: brown;
+            background-color: rgba(97, 96, 96, 0.8);
+            color: white;
             z-index: 10;
         }
 
@@ -28,7 +39,7 @@
 
         .pg_header .logo a img{
             height: 50px;
-            width: 50px;
+            width: 60px;
         }
 
         .pg_header .web_name {
@@ -44,27 +55,42 @@
         .pg_header .person_info{
             position: relative;
             height: 50px;
-            width: 160px;
+            width: 200px;
         }
+
         .pg_header .person_info img{
-            border: 0;
-            height: 50px;
             width: 50px;
+            height: 50px;
+            margin-left: 75px;
             /*使用border-radius可以定义边框的圆角程度*/
             border-radius: 50%;
         }
 
         .pg_header .person_info .info{
             position: absolute;
-            width: 150px;
-            background-color: cornflowerblue;
+            width: 200px;
+            height: 80px;
+            background-color: #dcdce2;
             top: 50px;
             z-index: 20;
             display: none;
         }
+
+         .pg_header .person_info .info .logout_div {
+             height:30px;
+             margin-top:50px;
+         }
+
+        .pg_header .person_info .info .logout_div .btn1{
+            height:30px;
+            width: 50%;
+            background: dodgerblue;
+         }
+
         .pg_header .person_info .info a{
             display: block;
             color: white;
+            text-decoration: none;
         }
 
         .pg_header .person_info:hover .info{
@@ -73,23 +99,12 @@
 
         .pg_content .menu{
             position: fixed;
-            top: 50px;
+            top: 51px;
             left: 0;
-            bottom: 35px;
+            bottom: 0;
             width: 200px;
-            background-color: black;
-            color: #dddddd;
-            opacity: 0.8;
-        }
-        .pg_content .content{
-            position: fixed;
-            top: 50px;
-            right: 0;
-            bottom: 35px;
-            left: 200px;
-            background-color: #dddddd;
-            overflow: auto;
-            z-index: 8;
+            background-color: rgba(201, 201, 219, 0.8);
+            color: white;
         }
 
         .pg_content .menu .menu_s{
@@ -98,24 +113,24 @@
             text-align: center;
             line-height: 48px;
             border-bottom: 1px solid grey;
-        }
-
-        .hide{
-            display: none;
-        }
-        .pg_content .menu .header{
-            background-color: cornflowerblue;
             color: white;
         }
 
-        .pg_footer{
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            background: brown;
-            z-index: 10;
+        .pg_content .menu .menu_s .icon{
+            position:relative ;
+            width: 30%;
         }
+
+        .pg_content .menu .menu_s .menu_text{
+            float:left;
+            margin-left: 20px;
+        }
+
+        .pg_content .menu .menu_s img{
+            height: 30px;
+            width: 30px;
+            float: left;
+            margin-top: 8px;
+            margin-left: 15px;
+        }
+

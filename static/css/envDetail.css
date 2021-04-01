@@ -1,0 +1,151 @@
+        .left{
+            float:left
+        }
+
+        .hide{
+            display: none;
+        }
+
+        /*.content_t{*/
+        /*    position: fixed;*/
+        /*    top: 60px;*/
+        /*    left: 220px;*/
+        /*    right: 50px;*/
+        /*    height: 30px;*/
+        /*    line-height: 30px;*/
+        /*    background: white;*/
+        /*}*/
+
+        .content_b{
+            position: fixed;
+            top: 60px;
+            left: 220px;
+            right: 20px;
+            bottom: 10px;
+            line-height: 30px;
+            background: white;
+            overflow: auto;
+        }
+
+        .content_add{
+            position: relative;
+            height: 30px;
+        }
+
+        .content_add input{
+            float: right;
+            margin-top: 3px;
+            margin-right: 10px;
+        }
+
+        .content_b_c{
+            position: relative;
+            top: 15px;
+        }
+
+        table{
+            width: 100%;
+            border-collapse:collapse;
+        }
+
+        table thead{
+           background-color: #f8f8f9;
+        }
+
+        table tbody tr td{
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+        }
+
+        .menu_item{
+            width: 20%;
+            background-color: rgba(150, 132, 167, 0.32);
+            /*background: darkcyan;*/
+            text-align: center;
+            line-height: 30px
+        }
+        .active{
+            background-color: #7a7f7f;
+        }
+
+        .shadow{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: black;
+            opacity: 0.6;
+            z-index: 12;
+        }
+        .edit_env_div,.edit_db_div,.add_env_div,.add_db_div{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            height: 400px;
+            width: 640px;
+            background: white;
+            border: 1px solid black;
+            margin-top: -200px;
+            margin-left: -320px;
+            /*overflow: auto;*/
+            z-index: 13;
+        }
+
+        .edit_div_body,.add_div_body{
+            position: relative;
+            padding:15px;
+        }
+
+        .edit_div_footer,.add_div_server_footer{
+            position: relative;
+            top: 110px;
+            padding: 15px;
+            text-align: right;
+        }
+
+        .add_div_db_footer{
+            position: relative;
+            top: 180px;
+            padding: 15px;
+            text-align: right;
+        }
+
+        .edit_tr,.add_tr{
+            position: relative;
+            height: 40px;
+            line-height: 40px;
+            width: 100%;
+        }
+
+        .edit_td,.add_td{
+            float: left;
+        }
+
+        .edit_h,.add_h{
+            float:left;
+            position: relative;
+            width: 130px;
+            text-align: right;
+        }
+
+        .edit_c,.add_c{
+            float:left;
+            position: relative;
+            width: 160px;
+        }
+
+        .del_div,.verfity_div{
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            width: 400px;
+            height: 40px;
+            line-height: 40px;
+            z-index: 20;
+            color: red;
+        }
+
+
+
