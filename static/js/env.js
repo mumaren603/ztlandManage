@@ -21,7 +21,7 @@ window.onload=function(){
     //添加确定
     $('#add_confirm_btn').click(function(){
         $.ajax({
-            url:'/env/addEnv',
+            url:'/envManage/env/addEnv',
             type:'POST',
             data:$('#add_form').serialize(),
             dataType:'JSON',

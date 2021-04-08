@@ -374,7 +374,7 @@
                                 <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
                                 <td>
                                     <input class="edit_env_btn" style="display: none" type="button" value="编辑">
-                                    <a href="/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                                    <a href="/envManage/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
     {#                              <input class="del_btn" type="button" hid={{ row.s_id  }} value="删除">#}
                                 </td>
                             </tr>
@@ -408,7 +408,7 @@
                             <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
                             <td>
                                 <input class="edit_env_btn" style="display: none" type="button" value="编辑">
-                                <a href="/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                                <a href="/envManage/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -441,7 +441,7 @@
                                 <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
                                 <td>
                                     <input class="edit_env_btn" style="display: none" type="button" value="编辑">
-                                    <a href="/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                                    <a href="/envManage/env/delEnv-{{ row.s_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -474,7 +474,7 @@
                                 <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
                                 <td>
                                     <input class="edit_env_btn" style="display: none" type="button" value="编辑">
-                                    <a href="/env/delEnv-{{ row.s_id }}"><button type="button" class="del_env_btn" style="display: none">删除</button></a>
+                                    <a href="/envManage/env/delEnv-{{ row.s_id }}"><button type="button" class="del_env_btn" style="display: none">删除</button></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -507,7 +507,7 @@
                                 <td name="db_user">{{ row.password }}</td>
                                 <td>
                                     <input class="edit_db_btn" style="display: none" type="button" value="编辑">
-                                    <a href="/env/delDb-{{ row.db_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
+                                    <a href="/envManage/env/delDb-{{ row.db_id }}"><button class="del_env_btn" type="button" style="display: none">删除</button></a>
                                 </td>
                             </tr>
                         {% endfor %}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>环境信息管理</title>
-    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="/static/css/common.css">
     {% block css %} {% endblock %}
 </head>
 <body>
@@ -21,7 +21,7 @@
         <div class="info">
             <div class="logout_div">
                 <a href="#"><input class="btn1 left"  type="button" value="修改密码"></a>
-                <a href="/logout"><input class="btn1 right" type="button" value="注销"></a>
+                <a href="/common/logout"><input class="btn1 right" type="button" value="注销"></a>
             </div>
         </div>
     </div>
@@ -31,15 +31,15 @@
     <div class="menu">
         <div class="menu_s">
             <div class="icon"><img src="/static/img/icon1.jpg" alt="头像"></div>
-            <div class="menu_text"><a href="/env">环境管理</a></div>
+            <div class="menu_text"><a href="/envManage/env">环境管理</a></div>
         </div>
         <div class="menu_s">
             <div class="icon"><img src="/static/img/icon2.jpg" alt="头像"></div>
-            <div class="menu_text"><a href="/host">主机管理</a></div>
+            <div class="menu_text"><a href="/hostManage/host">主机管理</a></div>
         </div>
         <div class="menu_s">
             <div class="icon"><img src="/static/img/icon3.jpg" alt="头像"></div>
-            <div class="menu_text"><a href="/data">数据查询</a></div>
+            <div class="menu_text"><a href="/dataManage/data">数据查询</a></div>
         </div>
     </div>
 </div>

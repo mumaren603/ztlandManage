@@ -1,14 +1,15 @@
     //登录
     $('#loginBtn').click(function () {
         $.ajax({
-            url:'/login/',
+            url:'/common/login',
             method:'POST',
             data:$('#login-form').serialize(),
             dataType:'JSON',
             success:function (data) {
                 console.log(data,typeof(data))
                 if(data.status == 0){
-                    window.location.href="/env"
+                    console.log("登录成功，正在跳转到env.html页面")
+                    window.location.href="/envManage/env"
                 }else {
                     var errMsg = data.err_msg
                     console.log('errMsg',errMsg)

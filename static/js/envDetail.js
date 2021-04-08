@@ -72,7 +72,7 @@ window.onload=function(){
     //前端、后端、FTP、微服务编辑界面确定按钮
     $('#editEnvConfirmBtn').click(function(){
         $.ajax({
-            url:'/env/editEnvDetail',
+            url:'/envManage/env/editEnvDetail',
             type:'POST',
             data:$('#edit_env_form').serialize(),
             dataType:'JSON',
@@ -142,7 +142,7 @@ window.onload=function(){
     //数据库编辑界面确定按钮
     $('#editDbConfirmBtn').click(function(){
         $.ajax({
-            url:'/env/editDbDetail',
+            url:'/envManage/env/editDbDetail',
             type:'POST',
             data:$('#edit_db_form').serialize(),
             dataType:'JSON',
@@ -223,7 +223,7 @@ window.onload=function(){
     //添加环境信息确定按钮
     $('#addEnvConfirmBtn').click(function(){
         $.ajax({
-            url:'/env/addEnvDetail',
+            url:'/envManage/env/addEnvDetail',
             type:'POST',
             data:$('#addEnvForm').serialize(),
             dataType:'JSON',
@@ -251,7 +251,7 @@ window.onload=function(){
     //添加环境信息确定按钮
     $('#addDbConfirmBtn').click(function(){
         $.ajax({
-            url:'/env/addDbDetail',
+            url:'/envManage/env/addDbDetail',
             type:'POST',
             data:$('#addDbForm').serialize(),
             dataType:'JSON',

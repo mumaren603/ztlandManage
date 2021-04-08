@@ -6,7 +6,8 @@
 
 {% block content %}
     <div class="data">
-        <form id="queryForm">
+        <div class="queryCondition">
+            <form id="queryForm">
             <table>
                 <tr>
                     <td style="width: 10%">所属环境：</td>
@@ -73,6 +74,13 @@
                 </tr>
             </table>
         </form>
+        </div>
+        <div class="tips2">
+             <p>友情提示：</p>
+             <p>1.限制信息选项是针对登记库已存在的数据。勾选该条件代表查询的产权已具备某种限制状态。</p>
+             <p>2.如查询抵押首次登记数据，产权类型选择【房屋】，登记类型选择【转移/变更/注销】，限制信息不能勾选【抵押】。</p>
+        </div>
+
         <!--遮罩层-->
         <div class="shadow hide"></div>
         <!--查询结果弹窗界面-->
@@ -105,7 +113,7 @@
             </div>
         </div>
 
-        <!--查询信息弹出框 -->
+        <!--提示信息弹出框 -->
         <div class="verfity_div hide">
             <div id="tips"></div>
             <div id="verfityInfo"></div>
@@ -116,98 +124,7 @@
 {% block js %}
     <script src="/static/js/env.js"></script>
     <script src="/static/js/jquery.min.js"></script>
-    <script>
-        //查询结果弹出框关闭 并清空页面数据
-        $('#closeBtn').click(function(){
-            $('#bdcdyh').html()
-            $('#zddmOrFwdm').html()
-            $('#bdcqzsOrZm').html()
-            $('#tdOrFwzl').html()
-            $('#resTab').addClass('hide')
-        })
-
-        // 查询
-        $('#queryBtn').click(function () {
-
-            //将查询按钮置为不可编辑且背景色置灰色
-            $('#queryBtn').attr("disabled",true);
-            $('#queryBtn').attr("class","queryBtn2");
-
-            //获取页面请求值
-            var env = $('#queryForm').find('select[name="env"]').val()
-            var cq = $('input[type="radio"][name="cqmc"]:checked').val()
-            var djlx = $('input[type="radio"][name="djlx"]:checked').val()
-            // 获取复选框chekbox多个值
-            var xzxx = []
-            $('input[type="checkbox"][name="xzxx"]:checked').each(
-                function () {
-                    xzxx.push($(this).val())
-                }
-            )
-            var sfpl = $('input[type="radio"][name="sfpl"]:checked').val()
-            console.log("请求参数:env:%s cq:%s djlx:%s xzxx:%s sfpl:%s" ,env,cq,djlx,xzxx,sfpl)
-
-            if ((env == undefined || env == '' || env == null) && (cq == undefined || cq == '' || cq == null) && (djlx == undefined || djlx == '' || djlx == null) && (sfpl == undefined || sfpl == '' || sfpl == null)) {
-                // 查不到数据界面提示
-                $('.verfity_div').removeClass('hide')
-                $('#verfityInfo').text('请选择必填条件！')
-                // 弹出框提示3秒后消失
-                setTimeout(function () {
-                    $('.verfity_div').addClass('hide')
-                }, 3000)
-                $('#texts').html("")
-            } else {
-                $.ajax({
-                    url: '/data/',
-                    type: 'POST',
-                    data: $('#queryForm').serialize(),
-                    dataType: 'JSON',
-                    success: function (obj) {
-                        console.log('后端返回数据：', obj)
-                        if (obj){
-                            //后端有返回则将查询按钮置为可编辑且背景色置蓝色
-                            $('#queryBtn').attr("disabled",false);
-                            $('#queryBtn').attr("class","queryBtn");
-
-                            if (obj.status == 1) {
-                                if (obj.data != 'null'){
-                                    // 接口返回异常
-                                    $('.verfity_div').removeClass('hide')
-                                    $('#verfityInfo').text(obj.err_msg)
-                                    // 弹出框提示3秒后消失
-                                    setTimeout(function () {
-                                        $('.verfity_div').addClass('hide')
-                                    }, 3000)
-                                    $('#texts').html("")
-                                }
-                                else{
-                                    // 无数据返回
-                                    $('.verfity_div').removeClass('hide')
-                                    $('#verfityInfo').text(obj.err_msg)
-                                    // 弹出框提示3秒后消失
-                                    setTimeout(function () {
-                                        $('.verfity_div').addClass('hide')
-                                    }, 3000)
-                                    $('#texts').html("")
-                                }
-                            } else {
-                                bdcdyh = obj['data'][0]
-                                zddmOrFwdm = obj['data'][1]
-                                tdOrFwzl = obj['data'][2]
-                                cqzsOrZm = obj['data'][3]
-                                $('#bdcdyh').html(bdcdyh)
-                                $('#zddmOrFwdm').html(zddmOrFwdm)
-                                $('#bdcqzsOrZm').html(cqzsOrZm)
-                                $('#tdOrFwzl').html(tdOrFwzl)
-                                // 弹出框
-                                $('#resTab').removeClass('hide')
-                            }
-                        }
-                    }
-                })
-            }
-        })
-    </script>
+    <script src="/static/js/data.js"></script>
 {% endblock %}
 
 
