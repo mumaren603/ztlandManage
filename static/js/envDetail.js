@@ -1,32 +1,33 @@
 window.onload=function(){
 /*----------------------权限获取-----------------------*/
-    var auth = $('.content_add').attr('auth')
+    var auth = $('.content_header').attr('auth')
     console.log("当前登录人具有权限编码为：",auth,typeof(auth))
 
-    //根据后端返回权限码判断当前用户是否有权限访问按钮（看见）
-    //环境详细信息-服务新增按钮
-    var code = 'env_detail_server_add'
-    if(auth.includes(code) || auth.includes('auth_all')){
+    var code_detail_add1 ='env_detail_server_add'
+    var code_detail_add2 ='env_detail_db_add'
+    var code_detail_edit ='env_detail_edit'
+    var code_detail_del ='env_detail_del'
+
+    //根据后端返回权限码判断当前用户是权限访问
+    if (auth.includes('auth_all')){
+        $('#addEnvDetailBtn').attr("style","display:inline-block;")
+        $('#addDbDetailBtn').attr("style","display:inline-block;")
+        $('.edit_envDetail_btn').attr("style","display:inline-block;")
+        $('.edit_dbDetail_btn').attr("style","display:inline-block;")
+        $('.del_envDetail_btn').attr("style","display:inline-block;")
+    }
+    if(auth.includes(code_detail_add1)){
         $('#addEnvDetailBtn').attr("style","display:inline-block;")
     }
-
-    //环境详细信息-数据库新增按钮
-    var code2 = 'env_detail_db_add'
-    if(auth.includes(code2) || auth.includes('auth_all')){
+    if(auth.includes(code_detail_add2)){
         $('#addDbDetailBtn').attr("style","display:inline-block;")
     }
-
-    //环境详细信息-编辑权限
-    var code3 = 'env_detail_edit'
-    if(auth.includes(code3) || auth.includes('auth_all')){
-        $('.edit_env_btn').attr("style","display:inline-block;")
-        $('.edit_db_btn').attr("style","display:inline-block;")
+    if(auth.includes(code_detail_edit)){
+        $('.edit_envDetail_btn').attr("style","display:inline-block;")
+        $('.edit_dbDetail_btn').attr("style","display:inline-block;")
     }
-
-    //环境详细信息-删除权限
-    var code4 = 'env_detail_del'
-    if(auth.includes(code4) || auth.includes('auth_all')){
-        $('.del_env_btn').attr("style","display:inline-block;")
+    if(auth.includes(code_detail_del)){
+         $('.del_envDetail_btn').attr("style","display:inline-block;")
     }
 
 
@@ -37,9 +38,9 @@ window.onload=function(){
         $('.content_b_c').children("[b='"+target+"']").removeClass('hide').siblings().addClass('hide');
     });
 
-/*---------------------------------------------*/
-    //前端、后端、FTP、微服务 编辑按钮
-    $('.edit_env_btn').click(function () {
+/*------------------编辑操作---------------------------*/
+    //前端、后端、FTP、中间件 编辑按钮
+    $('.edit_envDetail_btn').click(function () {
         $('.shadow,.edit_env_div').removeClass('hide')
 
         //获取当前编辑所在行的字段值
@@ -64,15 +65,15 @@ window.onload=function(){
         $('#edit_env_form').find('select[name="service_model"]').val(node_id)
     })
 
-    //前端、后端、FTP、微服务编辑界面取消按钮
+    //前端、后端、FTP、中间件编辑界面取消按钮
     $('#editEnvCancelBtn').click(function () {
         $('.shadow,.edit_env_div').addClass('hide')
     })
 
-    //前端、后端、FTP、微服务编辑界面确定按钮
+    //前端、后端、FTP、中间件编辑界面确定按钮
     $('#editEnvConfirmBtn').click(function(){
         $.ajax({
-            url:'/envManage/env/editEnvDetail',
+            url:'/envManage/env/detail/edit',
             type:'POST',
             data:$('#edit_env_form').serialize(),
             dataType:'JSON',
@@ -107,9 +108,8 @@ window.onload=function(){
         })
     })
 
-
     //数据库编辑按钮
-    $('.edit_db_btn').click(function () {
+    $('.edit_dbDetail_btn').click(function () {
         $('.shadow,.edit_db_div').removeClass('hide')
 
         //获取当前编辑所在行的字段值
@@ -142,7 +142,7 @@ window.onload=function(){
     //数据库编辑界面确定按钮
     $('#editDbConfirmBtn').click(function(){
         $.ajax({
-            url:'/envManage/env/editDbDetail',
+            url:'/envManage/db/detail/edit',
             type:'POST',
             data:$('#edit_db_form').serialize(),
             dataType:'JSON',
@@ -177,29 +177,56 @@ window.onload=function(){
         })
     })
 
-/*
-    //删除弹出框
-    var del_id
-    $('.del_btn').click(function(){
-        $('.shadow,.del_div').removeClass('hide')
-        del_id = $(this).parent().parent().attr('hid')
-        console.log(hid)
-        $('#del_div_confirm').attr('del_id',hid)
+
+/*--------------删除操作--------------------*/
+    //环境、数据库详细信息删除
+    $('.del_envDetail_btn').click(function () {
+        $('.shadow,.tips').removeClass('hide')
+
+        //获取当前删除所在行的字段值
+        var h_id = $(this).parent().parent().attr('hid')
+        var node = $(this).parent().parent().attr('node')
+        console.log("删除行id为:",h_id)
+        console.log("删除行所属node为:",node)
+
+        //将当前行id传递到弹出框中
+        $('.tips').find('div[name="hid"]').val(h_id)
+        $('.tips').find('div[name="node"]').val(node)
     })
 
-    //删除弹出框取消按钮
-    $('#del_div_cancel').click(function(){
-        $('.del_div,.shadow').addClass('hide')
+    //环境、数据库详细信息删除取消
+    $('#delEnvDetailCancelBtn').click(function () {
+        $('.shadow,.tips').addClass('hide')
     })
 
-    //删除弹出框确定按钮
-    $('#del_div_confirm').click(function(){
-        console.log(del_id)
-        $('#del_div').attr('action').val('detail-{{ del_id }}')
+    //环境、数据库详细信息删除确定
+    $('#delEnvDetailConfirmBtn').click(function(){
+        $.ajax({
+            url:'/envManage/env/detail/del',
+            type:'POST',
+            data:{'hid':$('.tips_footer').val(),'node':$('#node_v').val()},
+            dataType:'JSON',
+            success:function (data) {
+                console.log("后端返回数据：",data)
+                if(data.status == 0){
+                    location.reload()
+                }else {
+                    var error_obj = JSON.stringify(data.err_msg)  //转为字符串
+                    console.log('error_obj:',error_obj,typeof(error_obj))
+                    $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
+                        console.log('#####',k,v)
+                        // 如果前端值在后端处理有问题，那么通过弹出框显示错误信息
+                        $('.verfity_div').removeClass('hide')
+                        $('#verfityInfo').text(v)
+                        // 弹出框提示3秒后消失
+                        setTimeout(function (){$('.verfity_div').addClass('hide')},3000 )
+                        })
+                }
+            }
+        })
     })
-*/
 
-/*--------------添加详细信息--------------------*/
+/*--------------添加操作--------------------*/
     //添加环境详细信息按钮
     $('#addEnvDetailBtn').click(function () {
         $('.shadow,.add_env_div').removeClass('hide')
@@ -223,7 +250,7 @@ window.onload=function(){
     //添加环境信息确定按钮
     $('#addEnvConfirmBtn').click(function(){
         $.ajax({
-            url:'/envManage/env/addEnvDetail',
+            url:'/envManage/env/detail/add',
             type:'POST',
             data:$('#addEnvForm').serialize(),
             dataType:'JSON',
@@ -248,10 +275,10 @@ window.onload=function(){
         })
     })
 
-    //添加环境信息确定按钮
+    //添加数据库信息确定按钮
     $('#addDbConfirmBtn').click(function(){
         $.ajax({
-            url:'/envManage/env/addDbDetail',
+            url:'/envManage/db/detail/add',
             type:'POST',
             data:$('#addDbForm').serialize(),
             dataType:'JSON',

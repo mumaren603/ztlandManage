@@ -6,17 +6,7 @@
             display: none;
         }
 
-        /*.content_t{*/
-        /*    position: fixed;*/
-        /*    top: 60px;*/
-        /*    left: 220px;*/
-        /*    right: 50px;*/
-        /*    height: 30px;*/
-        /*    line-height: 30px;*/
-        /*    background: white;*/
-        /*}*/
-
-        .content_b{
+        .content{
             position: fixed;
             top: 60px;
             left: 220px;
@@ -24,23 +14,41 @@
             bottom: 10px;
             line-height: 30px;
             background: white;
-            overflow: auto;
         }
 
-        .content_add{
-            position: relative;
-            height: 30px;
+        .content_header{
+            height: 5%;
         }
 
-        .content_add input{
+        .content_body{
+            height: 95%;
+        }
+
+        .content_body .head{
+            height: 6%;
+        }
+        .content_body .body{
+            height: 88%;
+        }
+        .content_body .footer{
+            height: 6%;
+        }
+
+        .content_header input{
             float: right;
             margin-top: 3px;
             margin-right: 10px;
         }
 
-        .content_b_c{
-            position: relative;
-            top: 15px;
+        .content_body .head .menu_item{
+            width: 20%;
+            background-color: rgba(150, 132, 167, 0.32);
+            text-align: center;
+            line-height: 30px;
+        }
+
+        .content_body .head .active{
+            background-color: #7a7f7f;
         }
 
         table{
@@ -52,21 +60,10 @@
            background-color: #f8f8f9;
         }
 
-        table tbody tr td{
-            height: 30px;
+        table tbody tr{
+            height: 45px;
             text-align: center;
-            line-height: 30px;
-        }
-
-        .menu_item{
-            width: 20%;
-            background-color: rgba(150, 132, 167, 0.32);
-            /*background: darkcyan;*/
-            text-align: center;
-            line-height: 30px
-        }
-        .active{
-            background-color: #7a7f7f;
+            line-height: 45px;
         }
 
         .shadow{
@@ -76,7 +73,7 @@
             right: 0;
             bottom: 0;
             background: black;
-            opacity: 0.6;
+            opacity: 0.3;
             z-index: 12;
         }
         .edit_env_div,.edit_db_div,.add_env_div,.add_db_div{
@@ -146,6 +143,4 @@
             z-index: 20;
             color: red;
         }
-
-
 

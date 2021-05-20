@@ -4,14 +4,16 @@ from envManage import views
 
 urlpatterns = [
     re_path('env$', views.env),
-    re_path('env/detail-(?P<nid>\d+)', views.envDetail),
-    re_path('env/delEnv-(?P<nid>\d+)', views.envDel),
-    re_path('env/delDb-(?P<nid>\d+)', views.dbDel),
     path('env/query', views.envQuery),
-    path('env/addEnv', views.envAdd),
-    path('env/editEnvDetail', views.envDetailedit.as_view()),
-    path('env/editDbDetail', views.dbDetailedit.as_view()),
-    path('env/addEnvDetail', views.envDetailAdd),
-    path('env/addDbDetail', views.dbDetailAdd),
+    path('env/add', views.envAdd),
+    path('env/edit', views.envEdit),
+    path('env/del', views.envDel),
+    # re_path('env/detail-(?P<nid>\d+)', views.envDetail),
+    re_path('env/detail-(?P<nid>\d+)-(?P<uid>\d+)', views.envDetail.as_view()),
+    path('env/detail/edit', views.envDetailedit.as_view()),
+    path('db/detail/edit', views.dbDetailedit.as_view()),
+    path('env/detail/del', views.envDetaildel.as_view()),
+    path('env/detail/add', views.envDetailAdd),
+    path('db/detail/add', views.dbDetailAdd),
 ]
 

@@ -83,7 +83,7 @@ DATABASES = {
         'NAME':'ztland',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '172.0.0.204',
+        'HOST': '172.16.17.204',
         'PORT': '3306',
     }
 }

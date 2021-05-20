@@ -34,7 +34,7 @@ def envDetail(request,nid):
             FtpService = models.EnvDetailInfo.objects.filter(env_sub_node=nid,service_model= 'FTP')
             dbService = models.DbInfo.objects.filter(db_node_id=nid)
             # 返回信息有前端传过来入参nid? 主页面传过来参数便于子页面添加数据时和主页面数据关联
-            return render(request, 'envDetail.html', {'auth':auth,'env_node_id':nid, 'envNode':envNode, 'frontService':frontService, 'backService':backService, 'microService':microService, 'FtpService':FtpService, 'dbService':dbService})
+            return render(request, 'envDetail-1.html', {'auth':auth, 'env_node_id':nid, 'envNode':envNode, 'frontService':frontService, 'backService':backService, 'microService':microService, 'FtpService':FtpService, 'dbService':dbService})
     else:
         return render(request, 'login.html')
 

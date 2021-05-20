@@ -2,44 +2,324 @@ from django.shortcuts import render,redirect,HttpResponse
 from django.utils.decorators import method_decorator
 from envManage import models
 from django.views import View
-from commonManage.views import envDetailInfoValidTemplate,addEnvValidTemplate,dbDetailInfoValidTemplate
+from commonManage.views import envDetailInfoValidTemplate,envValidTemplate,dbDetailInfoValidTemplate
 import json
-from commonManage import sqlQuery
 from commonManage.views import getAuth,auth
+from commonManage.views import Page
 
-#环境信息
+'''环境主信息操作'''
+# 获取主信息
 @auth
 def env(request):
     if request.method == 'GET':
         envInfo = models.EnvInfo.objects.all()
+        print(envInfo)
         # 获取权限
         auth = getAuth(request.session.get('username'))
-        return render(request,'env.html',{'envinfo':envInfo,'auth':auth})
+
+        # 获取数据总条数
+        env_count = len(envInfo)
+        print("环境信息总条数是：%d" % env_count)
+
+        # 获取当前页码
+        current_page = request.GET.get('p', 1)
+        current_page = int(current_page)
+
+        # 定义每页展示数据条数
+        val = request.COOKIES.get('per_page_count', 8)
+        val = int(val)
+
+        # 调用Page类实现页码动态展示
+        page_obj = Page(current_page, env_count, val)
+
+        envInfo = envInfo[page_obj.start:page_obj.end]
+        print('当前页码对应的数据为：%s' %envInfo)
+
+        page_str = page_obj.page_str("/envManage/env")
+
+        return render(request,'env.html',{'envinfo':envInfo,'auth':auth,'page_str':page_str})
     else:
         return render(request, 'login.html')
 
-# 环境详细信息
+# 添加环境主信息
 @auth
-def envDetail(request, nid):
-    if request.method == 'GET':
+def envAdd(request):
+    if request.method == 'POST':
+        res_msg = {'status': 0, 'err_msg': None}
+
+        # status获取前端传来的，其余字段可以从obj获取.obj封装前端需要校验的字段
+        status = request.POST.get('status')
+
+        obj = envValidTemplate(request.POST)  # 将前端校验数据发给addEnvValidTemplate模板,模板中定义的字段开始做校验
+        v = obj.is_valid()
+        if v:
+            try:
+                frontIP = obj.cleaned_data.get('frontIP')
+                backIP = obj.cleaned_data.get('backIP')
+                dbIP = obj.cleaned_data.get('dbIP')
+                env_name = obj.cleaned_data.get('env_name')
+                models.EnvInfo.objects.create(
+                    frontIP=frontIP,
+                    backIP=backIP,
+                    dbIP=dbIP,
+                    env_name=env_name,
+                    status=status
+                )
+            except Exception as e:
+                # print(e)                  #后期处理成记录到日志
+                res_msg['status'] = 1
+                res_msg['err_msg'] = '请求错误'
+        else:
+            res_msg['status'] = 1
+            res_msg['err_msg'] = obj.errors
+        return HttpResponse(json.dumps(res_msg))  # string
+
+# 编辑环境主信息
+@auth
+def envEdit(request):
+    if request.method == 'POST':
+        res_msg = {'status': 0, 'err_msg': None}
+
+        # id，status获取前端传来的，其余字段可以从obj获取.obj封装前端需要校验的字段
+        id = request.POST.get('s_id')
+        status = request.POST.get('status')
+
+        obj = envValidTemplate(request.POST)  # 将前端校验数据发给addEnvValidTemplate模板,模板中定义的字段开始做校验
+        v = obj.is_valid()
+        if v:
+            try:
+                frontIP = obj.cleaned_data.get('frontIP')
+                backIP = obj.cleaned_data.get('backIP')
+                dbIP = obj.cleaned_data.get('dbIP')
+                env_name = obj.cleaned_data.get('env_name')
+                models.EnvInfo.objects.filter(m_id=id).update(
+                    frontIP=frontIP,
+                    backIP=backIP,
+                    dbIP=dbIP,
+                    env_name=env_name,
+                    status=status
+                )
+            except Exception as e:
+                print('ERROR',e)
+                res_msg['status'] = 1
+                res_msg['err_msg'] = '请求错误'
+        else:
+            res_msg['status'] = 1
+            res_msg['err_msg'] = obj.errors
+        return HttpResponse(json.dumps(res_msg))  # string
+
+# 删除环境主信息
+@auth
+def envDel(request):
+    if request.method == 'POST':
+        res_msg = {'status': 0, 'err_msg': None}
+
+        hid = request.POST.get('hid')
+        print('删除主环境id为：',hid)
+
+        if hid:
+            try:
+                # 这部分主要为了记录删除数据到日志中
+                obj = models.EnvDetailInfo.objects.filter(env_sub_node_id=hid).values()
+                print("删除前EnvDetailInfo表中存在%d条数据" %len(obj))
+
+                if len(obj)>0:
+                    for row in obj:
+                        print("删除数据为%s" %row)
+
+                # 删除操作
+                models.EnvDetailInfo.objects.filter(env_sub_node_id=hid).delete()
+
+                del_obj = models.EnvDetailInfo.objects.filter(env_sub_node_id=hid).values()
+                print("EnvDetailInfo表数据删除结束，表中存在%d条数据" %len(del_obj))
+                # 子表数据删除完则执行主表数据删除
+                if not del_obj:
+                    models.EnvInfo.objects.filter(m_id=hid).delete()
+                else:
+                    raise Exception
+                    print("删除失败，错误信息为:",Exception)
+                    res_msg['status'] = 1
+                    res_msg['err_msg'] = '请求错误'
+            except Exception as e:
+                print('ERROR',e)
+                res_msg['status'] = 1
+                res_msg['err_msg'] = '请求错误'
+        else:
+            res_msg['status'] = 1
+            res_msg['err_msg'] = '未获取到删除表主键id'
+        return HttpResponse(json.dumps(res_msg))
+
+# 查询环境主信息(非ajax)
+@auth
+def envQuery(request):
+    if request.method == 'POST':
+        queryParam = request.POST.get('searchParam')
+        print('queryParam2',queryParam)
+        if queryParam:
+            try:
+                # 环境信息支持模糊查询
+                queryRes = models.EnvInfo.objects.filter(env_name__contains=queryParam).first()
+                print(queryRes)
+                return render(request, 'envQuery.html', {'queryRes': queryRes})
+            except Exception as e:
+                raise e
+        else:
+            return HttpResponse('请求错误')
+
+'''环境详细信息'''
+# @auth
+# def envDetail(request, nid):
+#     if request.method == 'GET':
+#         # 获取权限
+#         auth = getAuth(request.session.get('username'))
+#
+#         # 数据处理
+#         envNode = models.EnvInfo.objects.filter(m_id=nid).first()
+#         print('envNode',envNode)
+#         # 根据nid,查询出该环境前端、微服务、FTP
+#         frontService = models.EnvDetailInfo.objects.filter(env_sub_node_id=nid, service_model='前端')
+#         backService = models.EnvDetailInfo.objects.filter(env_sub_node_id=nid, service_model='后端')
+#         microService = models.EnvDetailInfo.objects.filter(env_sub_node=nid, service_model='微服务')
+#         FtpService = models.EnvDetailInfo.objects.filter(env_sub_node=nid, service_model='FTP')
+#         dbService = models.DbInfo.objects.filter(db_node_id=nid)
+#
+#         # 获取数据总条数
+#         env_count = models.EnvDetailInfo.objects.filter(env_sub_node_id=nid, service_model='后端').count()
+#         print("后端环境信息总条数是：%d" % env_count)
+#
+#         # 获取当前页码
+#         current_page = request.GET.get('p', 1)
+#         current_page = int(current_page)
+#
+#         # 定义每页展示数据条数
+#         val = request.COOKIES.get('per_page_count', 8)
+#         val = int(val)
+#
+#         # 调用Page类实现页码动态展示
+#         page_obj = Page(current_page, env_count, val)
+#         print('page_obj', page_obj)
+#
+#         backService = backService[page_obj.start:page_obj.end]
+#         print('当前页码对应的数据为：%s' % backService)
+#
+#         page_str = page_obj.page_str("/envManage/env/detail-%s" % nid)
+#
+#
+#         # 返回信息有前端传过来入参nid? 主页面传过来参数便于子页面添加数据时和主页面数据关联
+#         return render(request, 'envDetail-1.html',
+#                       {'auth': auth, 'env_node_id': nid, 'envNode': envNode, 'frontService': frontService,
+#                        'backService': backService, 'microService': microService, 'FtpService': FtpService,
+#                        'dbService': dbService,'page_str': page_str})
+#     else:
+#         return render(request, 'login.html')
+
+'''环境详细信息
+@param request: 前端所有请求
+@param nid:前端传过来主环境信息id
+@param uid:取值（1，2，3，4，5）分别对应前端，后端，中间件，FTP，数据库
+'''
+class envDetail(View):
+    @method_decorator(auth)
+    def get(self,request,nid,uid):
+        self.nid = nid
+        self.uid = uid
+        print('nid:',nid)
+        print('uid:', uid)
+
         # 获取权限
         auth = getAuth(request.session.get('username'))
 
-        # 数据处理
-        envNode = models.EnvInfo.objects.filter(m_id=nid).first()
-        # 根据nid,查询出该环境前端、微服务、FTP
-        frontService = models.EnvDetailInfo.objects.filter(env_sub_node_id=nid, service_model='前端')
-        backService = models.EnvDetailInfo.objects.filter(env_sub_node_id=nid, service_model='后端')
-        microService = models.EnvDetailInfo.objects.filter(env_sub_node=nid, service_model='微服务')
-        FtpService = models.EnvDetailInfo.objects.filter(env_sub_node=nid, service_model='FTP')
-        dbService = models.DbInfo.objects.filter(db_node_id=nid)
-        # 返回信息有前端传过来入参nid? 主页面传过来参数便于子页面添加数据时和主页面数据关联
-        return render(request, 'envDetail.html',
-                      {'auth': auth, 'env_node_id': nid, 'envNode': envNode, 'frontService': frontService,
-                       'backService': backService, 'microService': microService, 'FtpService': FtpService,
-                       'dbService': dbService})
-    else:
-        return render(request, 'login.html')
+        # 前端数据
+        if self.uid == '1':
+            frontService = self.getFrontService()
+            print("前端返回所有数据：",frontService)
+
+            data,page_str = self.getPage(request,self.nid,self.uid,frontService)
+            frontService = data
+
+            return render(request, 'envDetail-1.html', {'auth': auth, 'env_node_id': nid,  'frontService': frontService,'page_str':page_str})
+        # 后端数据
+        elif self.uid == '2':
+            backService = self.getBackService()
+            print("后端返回所有数据：",backService)
+
+            data,page_str = self.getPage(request,self.nid,self.uid,backService)
+            backService = data
+
+            return render(request, 'envDetail-2.html',{'auth': auth, 'env_node_id': nid,'backService': backService,'page_str':page_str})
+        # 中间件数据
+        elif self.uid == '3':
+            middleService = self.getMiddleService()
+            print("中间件返回所有数据：",middleService)
+
+            data,page_str = self.getPage(request,self.nid,self.uid,middleService)
+            middleService = data
+
+            return render(request, 'envDetail-3.html',{'auth': auth, 'env_node_id': nid,'middleService': middleService,'page_str':page_str})
+        # Ftp数据
+        elif self.uid == '4':
+            ftpService = self.getFtpService()
+            print("FTP返回所有数据：", ftpService)
+
+            data,page_str = self.getPage(request,self.nid,self.uid,ftpService)
+            ftpService = data
+
+            return render(request, 'envDetail-4.html',{'auth': auth, 'env_node_id': nid, 'ftpService': ftpService,'page_str':page_str})
+        # 数据库数据
+        elif self.uid == '5':
+            dbService = self.getDbService()
+            print("数据库返回所有数据：", dbService)
+
+            data,page_str = self.getPage(request,self.nid,self.uid,dbService)
+            dbService = data
+
+            return render(request, 'envDetail-5.html',{'auth': auth, 'env_node_id': nid, 'dbService': dbService,'page_str':page_str})
+
+
+    def getFrontService(self):
+        frontService = models.EnvDetailInfo.objects.filter(env_sub_node_id=self.nid, service_model='前端')
+        return frontService
+
+    def getBackService(self):
+        backService = models.EnvDetailInfo.objects.filter(env_sub_node_id=self.nid, service_model='后端')
+        return backService
+
+    def getMiddleService(self):
+        middleService = models.EnvDetailInfo.objects.filter(env_sub_node=self.nid, service_model='微服务')
+        return middleService
+
+    def getFtpService(self):
+        ftpService = models.EnvDetailInfo.objects.filter(env_sub_node=self.nid, service_model='FTP')
+        return ftpService
+
+    def getDbService(self):
+        dbService = models.DbInfo.objects.filter(db_node_id=self.nid)
+        return dbService
+
+    # 分页公共方法
+    def getPage(self,request,nid,uid,node):
+        # 分页
+        # 获取数据总条数
+        env_count = len(node)
+        print("查询数据库信息总条数：%d" % env_count)
+
+        # 获取当前页码
+        current_page = request.GET.get('p', 1)
+        current_page = int(current_page)
+        print('当前页码是：%d' % current_page)
+
+        # 定义每页展示数据条数
+        val = request.COOKIES.get('per_page_count', 8)
+        val = int(val)
+
+        # 调用Page类实现页码动态展示
+        page_obj = Page(current_page, env_count, val)
+
+        data = node[page_obj.start:page_obj.end]
+        print('当前页码对应的数据为：%s' % data)
+
+        page_str = page_obj.page_str("/envManage/env/detail-%s-%s" % (nid, uid))
+        return data,page_str
 
 # 环境详细信息编辑确定
 class envDetailedit(View):
@@ -120,114 +400,38 @@ class dbDetailedit(View):
             res_msg['err_msg'] = obj.errors
         return HttpResponse(json.dumps(res_msg))  # string
 
-# 删除操作
-@auth
-def envDel(request, nid):
-    if request.method == 'GET':
-        try:
-            print('nid', nid)
-            # 根据nid 查询所在行的env_sub_node_id ，方便删除完跳转到具体详情页面
-            env_sub_node_id = models.EnvDetailInfo.objects.values('env_sub_node_id').filter(s_id=nid)
-            print(env_sub_node_id)  # QuerySet
-            env_sub_node_id = env_sub_node_id[0].get('env_sub_node_id')
-            print("所属环境是：", env_sub_node_id)
-            models.EnvDetailInfo.objects.filter(s_id=nid).delete()
-        except Exception as e:
-            print(e)
-        return redirect('/envManage/env/detail-%s' % env_sub_node_id)
+# 环境、数据库详细信息删除确定
+class envDetaildel(View):
+    def get(self,request):
+        pass
 
-
-# 删除操作
-@auth
-def dbDel(request, nid):
-    if request.method == 'GET':
-        try:
-            print('nid', nid)
-            # 根据nid 查询所在行的env_sub_node_id ，方便删除完跳转到具体详情页面
-            db_node_id = models.DbInfo.objects.values('db_node_id').filter(db_id=nid)
-            db_node_id = db_node_id[0].get('db_node_id')
-            models.DbInfo.objects.filter(db_id=nid).delete()
-        except Exception as e:
-            pass
-            # print(e)  #后期写到日志
-        return redirect('/envManage/env/detail-%s' % db_node_id)
-
-
-
-# 查询(ajax，前端实现有问题)
-# def envQuery(request):
-#     if request.is_ajax():
-#     # if request.method == 'POST':
-#         res_msg={'code':0,'err_msg':None}
-#
-#         searchParam = request.POST.get('searchParam')
-#         print('searchParam:%s' %searchParam)
-#         try:
-#             queryRes = models.EnvInfo.objects.filter(env_name=searchParam).first()
-#             if queryRes:
-#                 print('queryRes：',type(queryRes))
-#                 # res_msg['data']=serializers.serialize('json',queryRes)
-#                 return render(request, 'envQuery.html', {'queryRes': queryRes})
-#                 print("11111")
-#             else:
-#                 res_msg['code']=1
-#                 res_msg['err_msg']='查询结果不存在'
-#         except:
-#             res_msg['code']=1
-#             res_msg['err_msg']="请求错误"
-#         return HttpResponse(json.dumps(res_msg))
-
-# 查询(非ajax)
-@auth
-def envQuery(request):
-    if request.method == 'POST':
-        queryParam = request.POST.get('searchParam')
-        print('queryParam2',queryParam)
-        if queryParam:
-            try:
-                # 环境信息支持模糊查询
-                queryRes = models.EnvInfo.objects.filter(env_name__contains=queryParam).first()
-                print(queryRes)
-                return render(request, 'envQuery.html', {'queryRes': queryRes})
-            except Exception as e:
-                raise e
-        else:
-            return HttpResponse('请求错误')
-
-
-# 添加环境主信息
-@auth
-def envAdd(request):
-    if request.method == 'POST':
+    @method_decorator(auth)
+    def post(self,request):
         res_msg = {'status': 0, 'err_msg': None}
 
-        # status获取前端传来的，其余字段可以从obj获取.obj封装前端需要校验的字段
-        status = request.POST.get('status')
-
-        obj = addEnvValidTemplate(request.POST)  # 将前端校验数据发给addEnvValidTemplate模板,模板中定义的字段开始做校验
-        v = obj.is_valid()
-        if v:
-            try:
-                frontIP = obj.cleaned_data.get('frontIP')
-                backIP = obj.cleaned_data.get('backIP')
-                dbIP = obj.cleaned_data.get('dbIP')
-                env_name = obj.cleaned_data.get('env_name')
-                models.EnvInfo.objects.create(
-                    frontIP=frontIP,
-                    backIP=backIP,
-                    dbIP=dbIP,
-                    env_name=env_name,
-                    status=status
-                )
-            except Exception as e:
-                # print(e)                  #后期处理成记录到日志
-                res_msg['status'] = 1
-                res_msg['err_msg'] = '请求错误'
+        hid = request.POST.get('hid')
+        node = request.POST.get('node')
+        print('删除详细环境信息id为：',hid)
+        print('删除信息所属node为：', node)
+        if hid:
+            if node:
+                try:
+                    models.EnvDetailInfo.objects.filter(s_id=hid).delete()
+                except Exception as e:
+                    print('删除失败，错误信息是', e)
+                    res_msg['status'] = 1
+                    res_msg['err_msg'] = '请求错误'
+            else:
+                try:
+                    models.DbInfo.objects.filter(db_id=hid).delete()
+                except Exception as e:
+                    print('删除失败，错误信息是', e)
+                    res_msg['status'] = 1
+                    res_msg['err_msg'] = '请求错误'
         else:
             res_msg['status'] = 1
-            res_msg['err_msg'] = obj.errors
-        return HttpResponse(json.dumps(res_msg))  # string
-
+            res_msg['err_msg'] = '未获取到删除表主键id'
+        return HttpResponse(json.dumps(res_msg))
 
 # 添加环境详细服务信息
 @auth

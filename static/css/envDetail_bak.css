@@ -1,0 +1,178 @@
+        .left{
+            float:left
+        }
+
+        .hide{
+            display: none;
+        }
+
+        .content{
+            position: fixed;
+            top: 60px;
+            left: 220px;
+            right: 20px;
+            bottom: 10px;
+            line-height: 30px;
+            background: white;
+            /*overflow: auto;*/
+        }
+
+        .content_add{
+            position: relative;
+            /*height: 30px;*/
+            /*top:10px;*/
+            height: 10%;
+            background-color: red;
+        }
+
+        .content_add input{
+            /*position: relative;*/
+            float: right;
+            margin-top: 3px;
+            margin-right: 10px;
+        }
+
+        .content_b_m{
+            position: relative;
+            height:10% ;
+            background-color: blue;
+        }
+
+        .content_b_c{
+            position: relative;
+            /*top: 15px;*/
+            height: 70%;
+        }
+
+        .footer{
+            position: relative;
+            height: 10%;
+        }
+
+        /*.content_b_c .body{*/
+        /*    position: relative;*/
+        /*    height: 80%;*/
+        /*}*/
+        /*.content_b_c .footer{*/
+        /*    position: relative;*/
+        /*    height: 10%;*/
+        /*}*/
+
+        table{
+            width: 100%;
+            border-collapse:collapse;
+        }
+
+        table thead{
+           background-color: #f8f8f9;
+        }
+
+        table tbody tr{
+            height: 45px;
+            text-align: center;
+            line-height: 45px;
+        }
+
+
+        .menu_item{
+            width: 20%;
+            background-color: rgba(150, 132, 167, 0.32);
+            text-align: center;
+            line-height: 30px
+        }
+        .active{
+            background-color: #7a7f7f;
+        }
+
+        .shadow{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: black;
+            opacity: 0.3;
+            z-index: 12;
+        }
+        .edit_env_div,.edit_db_div,.add_env_div,.add_db_div{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            height: 400px;
+            width: 640px;
+            background: white;
+            border: 1px solid black;
+            margin-top: -200px;
+            margin-left: -320px;
+            /*overflow: auto;*/
+            z-index: 13;
+        }
+
+        .edit_div_body,.add_div_body{
+            position: relative;
+            padding:15px;
+        }
+
+        .edit_div_footer,.add_div_server_footer{
+            position: relative;
+            top: 110px;
+            padding: 15px;
+            text-align: right;
+        }
+
+        .add_div_db_footer{
+            position: relative;
+            top: 180px;
+            padding: 15px;
+            text-align: right;
+        }
+
+        .edit_tr,.add_tr{
+            position: relative;
+            height: 40px;
+            line-height: 40px;
+            width: 100%;
+        }
+
+        .edit_td,.add_td{
+            float: left;
+        }
+
+        .edit_h,.add_h{
+            float:left;
+            position: relative;
+            width: 130px;
+            text-align: right;
+        }
+
+        .edit_c,.add_c{
+            float:left;
+            position: relative;
+            width: 160px;
+        }
+
+        .del_div,.verfity_div{
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            width: 400px;
+            height: 40px;
+            line-height: 40px;
+            z-index: 20;
+            color: red;
+        }
+
+        .footer .page{
+            position: relative;
+            display: inline-block;
+            padding: 3px;
+            background-color: rgba(201, 201, 219, 0.8);
+            margin: 3px;
+        }
+        .footer .page.active{
+            background-color: rgba(97, 96, 96, 0.8);
+            color: white;
+        }
+
+
+

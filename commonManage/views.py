@@ -43,8 +43,8 @@ def auth(func):
     def inner(request,*args,**kwargs):
         if not request.session.get('is_login'):
             return render(request, 'login.html')
-        ret = func(request,*args,**kwargs)
-        return ret
+        res = func(request,*args,**kwargs)
+        return res
     return inner
 
 #获取权限
@@ -79,7 +79,7 @@ class envDetailInfoValidTemplate(forms.Form):
     service_model = forms.CharField(error_messages={'required': '所属节点不可为空！'})
 
 # 定义添加主环境信息模板校验
-class addEnvValidTemplate(forms.Form):
+class envValidTemplate(forms.Form):
     frontIP = forms.GenericIPAddressField(error_messages={'required': '前端IP地址不可为空！', 'invalid': '前端IP地址格式错误！'})
     backIP = forms.GenericIPAddressField(error_messages={'required': '后端IP地址不可为空！', 'invalid': '后端IP地址格式错误！'})
     dbIP = forms.GenericIPAddressField(error_messages={'required': '数据库IP地址不可为空！', 'invalid': '数据库IP地址格式错误！'})
@@ -100,29 +100,363 @@ class dbDetailInfoValidTemplate(forms.Form):
 '''数据库通用操作，包括数据库连接，释放，查询等'''
 import cx_Oracle as Oracle
 
-class DBAction():
-    def __init__(self ,connInfo):
-        self.conn = Oracle.Connection(connInfo)
-        print("数据库连接信息是：",self.conn)
+# class DBAction():
+#     def __init__(self ,connInfo):
+#         # self.connInfo = connInfo
+#         self.conn = Oracle.Connection(connInfo)
+#         self.cursor = self.conn.cursor()
+#         # print("数据库连接信息是：",self.conn)
+#
+#     def SqlExecute(self,sql):
+#         # self.conn = Oracle.Connection(self.connInfo)
+#         # cursor = self.conn.cursor()
+#         # print('cursor',cursor)
+#         try:
+#             res = self.cursor.execute(sql)
+#             print("执行的sql：%s" % sql)
+#             queryResult = res.fetchone()    # 元祖
+#             return queryResult
+#         except Exception as e:
+#             raise
+#             print('异常：',e)
+#         finally:
+#             self.cursor.close()
+#             self.conn.close()
+#
+#     def closeConn(self):
+#         self.conn.close()
 
-    def SqlExecute(self,sql):
-        cursor = self.conn.cursor()
-        try:
-            res = cursor.execute(sql)
-            print("执行的sql：%s" %res)
-            queryResult = res.fetchone()    # 元祖
-            # queryResult = queryResult[0]  # 取元祖第一个值
-            return queryResult
-        except Exception as e:
-            raise
-            print('异常',e)
-        finally:
-            cursor.close()
-
-    def closeConn(self):
-        self.conn.close()
-
-if __name__ =='__main__':
-    pass
+# if __name__ =='__main__':
+#     pass
     # connInfo = 'DJJGK/DJJGK@172.0.0.250/orcldj'
     # DBAction(connInfo).getQueryRes()
+
+# 连接池
+import cx_Oracle as Oracle
+from DBUtils.PooledDB import PooledDB
+from commonManage.dbConf2 import dataBases
+
+class OraclePool:
+    """
+    1) 这里封装了一些有关oracle连接池的功能;
+    2) sid和service_name，程序会自动判断哪个有值，
+        若两个都有值，则默认使用service_name；
+    3) 关于config的设置，注意只有 port 的值的类型是 int，以下是config样例:
+        config = {
+            'user':         'maixiaochai',
+            'password':     'maixiaochai',
+            'host':         '192.168.158.1',
+            'port':         1521,
+            'sid':          'maixiaochai',
+            'service_name': 'maixiaochai'
+        }
+    """
+
+    def __init__(self, env):
+        """
+        获得连接池
+        :param config:      dict    Oracle连接信息
+        """
+        self.__pool = self.__get_pool(env)
+
+    @staticmethod
+    def __get_pool(env):
+        """
+        :param config:        dict    连接Oracle的信息
+        ---------------------------------------------
+        以下设置，根据需要进行配置
+        maxconnections=6,   # 最大连接数，0或None表示不限制连接数
+        mincached=2,        # 初始化时，连接池中至少创建的空闲连接。0表示不创建
+        maxcached=5,        # 连接池中最多允许的空闲连接数，很久没有用户访问，连接池释放了一个，由6个变为5个，
+                            # 又过了很久，不再释放，因为该项设置的数量为5
+        maxshared=0,        # 在多个线程中，最多共享的连接数，Python中无用，会最终设置为0
+        blocking=True,      # 没有闲置连接的时候是否等待， True，等待，阻塞住；False，不等待，抛出异常。
+        maxusage=None,      # 一个连接最多被使用的次数，None表示无限制
+        setession=[],       # 会话之前所执行的命令, 如["set charset ...", "set datestyle ..."]
+        ping=0,             # 0  永远不ping
+                            # 1，默认值，用到连接时先ping一下服务器
+                            # 2, 当cursor被创建时ping
+                            # 4, 当SQL语句被执行时ping
+                            # 7, 总是先ping
+        """
+        qj_config = dataBases.get(env).get('qj')
+        dsn = None
+        host, port = qj_config.get('host'), qj_config.get('port')
+
+        if 'service_name' in qj_config:
+            dsn = Oracle.makedsn(host, port, service_name=qj_config.get('service_name'))
+
+        elif 'sid' in qj_config:
+            dsn = Oracle.makedsn(host, port, sid=qj_config.get('sid'))
+
+        pool = PooledDB(
+            Oracle,
+            mincached=5,
+            maxcached=10,
+            user=qj_config.get('user'),
+            password=qj_config.get('password'),
+            dsn=dsn
+        )
+
+        return pool
+
+    def __get_conn(self):
+        """
+        从连接池中获取一个连接，并获取游标。
+        :return: conn, cursor
+        """
+        conn = self.__pool.connection()
+        cursor = conn.cursor()
+
+        return conn, cursor
+
+    @staticmethod
+    def __reset_conn(conn, cursor):
+        """
+        把连接放回连接池。
+        :return:
+        """
+        cursor.close()
+        conn.close()
+
+    def __execute(self, sql, args=None):
+        """
+        执行sql语句
+        :param sql:     str     sql语句
+        :param args:    list    sql语句参数列表
+        :param return:  cursor
+        """
+        conn, cursor = self.__get_conn()
+
+        if args:
+            cursor.execute(sql, args)
+        else:
+            cursor.execute(sql)
+
+        return conn, cursor
+
+    def fetch_all(self, sql, args=None):
+        """
+        获取全部结果
+        :param sql:     str     sql语句
+        :param args:    list    sql语句参数
+        :return:        tuple   fetch结果
+        """
+        conn, cursor = self.__execute(sql, args)
+        result = cursor.fetchall()
+        self.__reset_conn(conn, cursor)
+
+        return result
+
+    def fetch_one(self, sql, args=None):
+        """
+        获取全部结果
+        :param sql:     str     sql语句
+        :param args:    list    sql语句参数
+        :return:        tuple   fetch结果
+        """
+        conn, cursor = self.__execute(sql, args)
+        result = cursor.fetchone()
+        print('result',result)
+        self.__reset_conn(conn, cursor)
+
+        return result
+
+    def execute_sql(self, sql, args=None):
+        """
+        执行SQL语句。
+        :param sql:     str     sql语句
+        :param args:    list    sql语句参数
+        :return:        tuple   fetch结果
+        """
+        conn, cursor = self.__execute(sql, args)
+        conn.commit()
+        self.__reset_conn(conn, cursor)
+
+    def __del__(self):
+        """
+        关闭连接池。
+        """
+        self.__pool.close()
+
+if __name__ == "__main__":
+    sql = "SELECT COUNT(*) FROM DC_DJDCBXX"
+    env='wx'
+    orcl = OraclePool(env)
+    result = orcl.fetch_all(sql)
+    print(result)
+
+
+
+# 分页
+# data_count=[]                                      # 数据总条数
+# for i in range(1090):
+#     data_count.append(i)
+# def page_list(request):
+#     current_page =  request.GET.get('page',1)      # 当前页  如果不存在默认展示第一页
+#     current_page = int(current_page)
+#
+#     per_page_count=10                              # 每页显示10条
+#     start_v = (current_page-1)*per_page_count      # 页面数据起始
+#     end_v = (current_page)*per_page_count          # 页面数据结束
+#
+#     # data = data_count[0:10]
+#     data = data_count[start_v:end_v]               # 当前页面战术数据范围 如【10,20】
+#
+#     all_count = len(data_count)                    # 数据总条数
+#     totalCount ,y = divmod(all_count,per_page_count)     #根据每页展示数据条数（如一页展示10条）获取整个数据会有多少个页码
+#     if y:
+#         totalCount += 1        #y不为0，那总得页数就的+1，y为0  那总页数就等于totalcount
+#
+#     page_list= []
+#     pager_num =11              #以下逻辑处理页码极端值处理，页码最前面，最后面等页码处理　
+#     if totalCount < pager_num:                     # 如果总页数小于11，那么页数范围就是【1，总页数】
+#         start_index = 1
+#         end_index = totalCount+1                   # 当前页取不到，所以要加1
+#     else:
+#         if current_page <= (pager_num+1)/2:        # 总页数大于11，当前页码小于等于6，那么页数范围就是【1,11】
+#             start_index = 1
+#             end_index = pager_num+1
+#         else:
+#             start_index = current_page - (pager_num-1)/2
+#             end_index = current_page + (pager_num+1)/2
+#             if (current_page +(pager_num-1)/2) > totalCount:   # 处理最后页码问题
+#                 start_index = totalCount-pager_num +1
+#                 end_index = totalCount + 1
+#
+#     if current_page == 1:
+#         prev = '<a class="page" href="javascript:void(0)">上一页</a>'   #javascript:void(0);  代表什么都不做
+#     else:
+#         prev = '<a class="page" href="/common/page_list?page=%s">上一页</a>' % (current_page-1)
+#     page_list.append(prev)
+#
+#     for i in range(int(start_index),int(end_index)):
+#         if i == current_page:
+#             temp = '<a class="page active" href="/common/page_list?page=%s">%s</a>' % (i, i)
+#         else:
+#             temp = '<a class="page" href="/common/page_list?page=%s">%s</a>' %(i,i)
+#         page_list.append(temp)
+#
+#     if current_page == totalCount:
+#         next = '<a class="page" href="javascript:void(0)">下一页</a>'
+#     else:
+#         next = '<a class="page" href="/common/page_list?page=%s">下一页</a>' % (current_page + 1)
+#     page_list.append(next)
+#
+#     jump = '''
+#     <input type="text"/><a onclick="jumpTo(this,'/common/page_list?page=')" id="ii1">跳转</a>
+#     <script>
+#     function jumpTo(ths,base){
+#         val = ths.previousSibling.value;
+#         location.href = base + val;
+#     }
+#     </script>
+#     '''
+#     page_list.append(jump)
+#
+#     page_str="".join(page_list)          #将列表转化为字符串
+#     from django.utils.safestring import mark_safe
+#     page_str = mark_safe(page_str)       #防止XSS攻击 比如评论区写上一些代码，浏览器不会解析而是把当前脚本当成字符串处理返回
+#
+#     return render(request,"page.html",{'data':data,'page_str':page_str})
+
+
+# 分页封装实现
+from django.utils.safestring import mark_safe
+
+class Page:
+    def __init__(self, current_page, data_count, per_page_count=10, pager_num=7):
+        self.current_page = current_page
+        self.data_count = data_count
+        self.per_page_count = per_page_count
+        self.pager_num = pager_num
+
+    @property    #装饰器@property ，后面引用地方就不用加括号。
+    def start(self):
+        return (self.current_page - 1) * self.per_page_count
+
+    @property
+    def end(self):
+        return self.current_page * self.per_page_count
+
+    @property
+    def total_count(self):
+        v, y = divmod(self.data_count, self.per_page_count)
+        if y:
+            v += 1
+        return v
+
+    def page_str(self, base_url):
+        page_list = []
+
+        if self.total_count < self.pager_num:
+            start_index = 1
+            end_index = self.total_count + 1
+        else:
+            if self.current_page <= (self.pager_num + 1) / 2:
+                start_index = 1
+                end_index = self.pager_num + 1
+            else:
+                start_index = self.current_page - (self.pager_num - 1) / 2
+                end_index = self.current_page + (self.pager_num + 1) / 2
+                if (self.current_page + (self.pager_num - 1) / 2) > self.total_count:
+                    end_index = self.total_count + 1
+                    start_index = self.total_count - self.pager_num + 1
+
+        if self.current_page == 1:
+            prev = '<div class="page"><a href="javascript:void(0);">上一页</a></div>'
+        else:
+            prev = '<div class="page"><a href="%s?p=%s">上一页</a></div>' % (base_url, self.current_page - 1,)
+        page_list.append(prev)
+
+        for i in range(int(start_index), int(end_index)):
+            if i == self.current_page:
+                temp = '<div class="page_num page_active"><a href="%s?p=%s">%s</a></div>' % (base_url, i, i)
+            else:
+                temp = '<div class="page_num"><a href="%s?p=%s">%s</a></div>' % (base_url, i, i)
+            page_list.append(temp)
+
+        if self.current_page == self.total_count:
+            next = '<div class="page"><a href="javascript:void(0);">下一页</a></div>'
+        else:
+            next = '<div class="page"><a href="%s?p=%s">下一页</a></div>' % (base_url, self.current_page + 1,)
+
+        page_list.append(next)
+
+        jump = """
+        <input type='text'  /><a onclick='jumpTo(this, "%s?p=");'>GO</a>
+        <script>
+            function jumpTo(ths,base){
+                var val = ths.previousSibling.value;
+                location.href = base + val;
+            }
+        </script>
+        """ % (base_url,)
+
+        page_list.append(jump)
+
+        page_str = mark_safe("".join(page_list))
+
+        return page_str
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

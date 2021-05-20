@@ -1,0 +1,74 @@
+       /*页面弹出提示框，确定框*/
+       .hide{
+           display: none;
+       }
+
+       .left{
+           float: left;
+       }
+
+       .right{
+           float: right;
+       }
+
+       .tips{
+            position: fixed;
+            width: 400px;
+            height: 150px;
+            top: 10%;
+            left: 50%;
+            background: white;
+            margin-left: -200px;
+            z-index: 13;
+        }
+
+       .tips .tips_head{
+            height: 30px;
+            line-height: 30px;
+            padding-left: 10px;
+            background-color: #c5cddb;
+        }
+
+       .tips .tips_body{
+            height: 90px;
+            padding-left: 10px;
+            line-height: 90px;
+        }
+
+       .tips .tips_footer{
+            height: 30px;
+            padding-right: 10px;
+            text-align: right;
+        }
+
+       /*页面分页样式*/
+       .page{
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 20px;
+            line-height: 20px;
+            padding: 3px;
+            background-color: rgba(201, 201, 219, 0.8);
+            margin: 3px;
+        }
+
+       .page_num{
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: 3px;
+            background-color: rgba(201, 201, 219, 0.8);
+            margin: 3px;
+        }
+
+       .page_active{
+            background-color: rgba(97, 96, 96, 0.8);
+            color: white;
+        }
+
+
+
