@@ -111,6 +111,10 @@ class Data(View):
                                 elif xzxx[0] == 'sfyg':
                                     queryRes = sqlQuery.sqlQuery(env).getHouseYgRegisterData()
                                     res_msg['data'] = queryRes
+                                # 预抵押
+                                elif xzxx[0] == 'sfydy':
+                                    queryRes = sqlQuery.sqlQuery(env).getHouseYgAndYdyRegisterData()
+                                    res_msg['data'] = queryRes
                                 else:
                                     res_msg['status'] = 1
                                     res_msg['err_msg'] = '选择限制信息不符合要求！'

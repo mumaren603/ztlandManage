@@ -340,11 +340,11 @@
         </div>
         <div class="content_body">
             <div class="head">
-                <div class="menu_item left" a="1"><a href="/envManage/env/detail-{{ env_node_id }}-1">前端信息</a></div>
-                <div class="menu_item left" a="2"><a href="/envManage/env/detail-{{ env_node_id }}-2">后端信息</a></div>
-                <div class="menu_item left" a="3"><a href="/envManage/env/detail-{{ env_node_id }}-3">中间件信息</a></div>
-                <div class="menu_item left" a="4"><a href="/envManage/env/detail-{{ env_node_id }}-4">FTP信息</a></div>
-                <div class="menu_item left active" a="5"><a href="/envManage/env/detail-{{ env_node_id }}-5">数据库信息</a></div>
+                <a href="/envManage/env/detail-{{ env_node_id }}-1"><div class="menu_item left " a="1">前端信息</div></a>
+                <a href="/envManage/env/detail-{{ env_node_id }}-2"><div class="menu_item left " a="2">后端信息</div></a>
+                <a href="/envManage/env/detail-{{ env_node_id }}-3"><div class="menu_item left " a="2">中间件信息</div></a>
+                <a href="/envManage/env/detail-{{ env_node_id }}-4"><div class="menu_item left " a="2">FTP信息</div></a>
+                <a href="/envManage/env/detail-{{ env_node_id }}-5"><div class="menu_item left active" a="2">数据库信息</div></a>
             </div>
             <div class="body">
                 <div b="5">
@@ -365,12 +365,12 @@
                         {% for row in dbService %}
                             <tr hid="{{ row.db_id}}">
                                 <td>{{ forloop.counter }}</td>
-                                <td name="db_password">{{ row.name }}</td>
+                                <td name="db_name">{{ row.name }}</td>
                                 <td name="db_ip">{{ row.ip }}</td>
                                 <td name="db_port">{{ row.port }}</td>
                                 <td name="db_sid">{{ row.sid }}</td>
-                                <td name="db_name">{{ row.user }}</td>
-                                <td name="db_user">{{ row.password }}</td>
+                                <td name="db_user">{{ row.user }}</td>
+                                <td name="db_password">{{ row.password }}</td>
                                 <td>
                                     <input class="edit_dbDetail_btn" style="display: none" type="button" value="编辑">
                                     <input class="del_envDetail_btn" style="display: none" type="button" value="删除">

@@ -1,32 +1,27 @@
-from commonManage.views import OraclePool
+from commonManage.views import DBAction
 from commonManage import dbConf
 
 
 class sqlQuery():
     def __init__(self,env):
         self.env = env
-        self.orcl = OraclePool(env)
-        # self.db_qj_conn = DBAction(dbConf.dataBases.get(self.env).get('qj'))
-        # self.db_dj_conn = DBAction(dbConf.dataBases.get(self.env).get('dj'))
+        self.db_qj_conn = DBAction(dbConf.dataBases.get(self.env).get('qj'))
+        self.db_dj_conn = DBAction(dbConf.dataBases.get(self.env).get('dj'))
 
     # 净地首次登记数据
     def getLandFirstRegisterData(self):
         querySQL = "select bdcdyh,zddm,tdzl from KJK.dc_djdcbxx where zt='1' and sfyx='0' and tdzl>'0' and qllx='3' and bdcdyh >'0' and rownum < 30 order by dbms_random.value()"
-        # queryRes = self.db_qj_conn.SqlExecute(querySQL)
-        queryRes = self.orcl.fetch_one(querySQL)
+        queryRes = self.db_qj_conn.SqlExecute(querySQL)
         print("权籍查询数据：",queryRes)
         # 检查该数据是否在登记平台做过登记,如果做过登记，发起流程会校验住，确保数据在权藉存在，在登记平台未做过登记
         queryJsydsyqSQL = "select count(1) from DJJGK.dj_jsydsyq where zt='1' and sfyx=1 and bdcdyh='" + queryRes[0] + "'"
-        # queryJsydsyqSQLRes = self.db_dj_conn.SqlExecute(queryJsydsyqSQL)
-        queryJsydsyqSQLRes = self.orcl.fetch_one(queryJsydsyqSQL)
+        queryJsydsyqSQLRes = self.db_dj_conn.SqlExecute(queryJsydsyqSQL)
         print("登记平台数据条数为：%s" % queryJsydsyqSQLRes)
         if queryJsydsyqSQLRes[0]:
             print("登记平台该土地信息已登记，重新获取数据！")
-            return sqlQuery(self.env).getLandFirstRegisterData()  # 递归
+            return sqlQuery(self.env).getLandFirstRegisterData()
         else:
             print("数据符合！数据为：" ,queryRes)
-            self.db_qj_conn.closeConn()
-            self.db_dj_conn.closeConn()
             return queryRes
 
     # 净地转移、变更、注销登记数据

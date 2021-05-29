@@ -2,6 +2,7 @@ window.onload=function(){
 /*----------------------权限获取-----------------------*/
     var auth = $('.content_header').attr('auth')
     console.log("当前登录人具有权限编码为：",auth,typeof(auth))
+    debugger
 
     var code_detail_add1 ='env_detail_server_add'
     var code_detail_add2 ='env_detail_db_add'
@@ -10,6 +11,7 @@ window.onload=function(){
 
     //根据后端返回权限码判断当前用户是权限访问
     if (auth.includes('auth_all')){
+        debugger
         $('#addEnvDetailBtn').attr("style","display:inline-block;")
         $('#addDbDetailBtn').attr("style","display:inline-block;")
         $('.edit_envDetail_btn').attr("style","display:inline-block;")
@@ -17,22 +19,27 @@ window.onload=function(){
         $('.del_envDetail_btn').attr("style","display:inline-block;")
     }
     if(auth.includes(code_detail_add1)){
+        debugger
         $('#addEnvDetailBtn').attr("style","display:inline-block;")
     }
     if(auth.includes(code_detail_add2)){
+        debugger
         $('#addDbDetailBtn').attr("style","display:inline-block;")
     }
     if(auth.includes(code_detail_edit)){
+        debugger
         $('.edit_envDetail_btn').attr("style","display:inline-block;")
         $('.edit_dbDetail_btn').attr("style","display:inline-block;")
     }
     if(auth.includes(code_detail_del)){
+        debugger
          $('.del_envDetail_btn').attr("style","display:inline-block;")
     }
 
 
     //不同业务端详细信息切换
     $('.menu_item').click(function(){
+        debugger
         $(this).addClass('active').siblings().removeClass('active');
         var target = $(this).attr('a');
         $('.content_b_c').children("[b='"+target+"']").removeClass('hide').siblings().addClass('hide');
@@ -42,6 +49,7 @@ window.onload=function(){
     //前端、后端、FTP、中间件 编辑按钮
     $('.edit_envDetail_btn').click(function () {
         $('.shadow,.edit_env_div').removeClass('hide')
+        debugger
 
         //获取当前编辑所在行的字段值
         var h_id = $(this).parent().parent().attr('hid')
@@ -55,6 +63,7 @@ window.onload=function(){
 
 
         //编辑框回填字段值
+        debugger
         $('#edit_env_form').find('input[name="s_id"]').val(h_id)
         $('#edit_env_form').find('input[name="service_chinese_name"]').val(service_chinese_name)
         $('#edit_env_form').find('input[name="service_name"]').val(service_name)
@@ -80,8 +89,10 @@ window.onload=function(){
             success:function (data) {
                 console.log(data,typeof(data))
                 if(data.status == 0){
+                    debugger
                     location.reload()
                 }else {
+                    debugger
                     var error_obj = JSON.stringify(data.err_msg)  //转为字符串
                     $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
                         console.log(k,v)
@@ -111,6 +122,7 @@ window.onload=function(){
     //数据库编辑按钮
     $('.edit_dbDetail_btn').click(function () {
         $('.shadow,.edit_db_div').removeClass('hide')
+        debugger
 
         //获取当前编辑所在行的字段值
         var db_id = $(this).parent().parent().attr('hid')
@@ -121,10 +133,8 @@ window.onload=function(){
         var db_user = $(this).parent().parent().children('td[name="db_user"]').text()
         var db_password = $(this).parent().parent().children('td[name="db_password"]').text()
 
-        console.log('db_ip',db_ip)
-        console.log('db_id',db_id)
-
         //编辑框回填字段值
+        debugger
         $('#edit_db_form').find('input[name="db_id"]').val(db_id)
         $('#edit_db_form').find('input[name="db_ip"]').val(db_ip)
         $('#edit_db_form').find('input[name="db_port"]').val(db_port)
@@ -136,6 +146,7 @@ window.onload=function(){
 
     //数据库编辑界面取消按钮
     $('#editDbCancelBtn').click(function () {
+        debugger
         $('.shadow,.edit_db_div').addClass('hide')
     })
 
@@ -147,10 +158,13 @@ window.onload=function(){
             data:$('#edit_db_form').serialize(),
             dataType:'JSON',
             success:function (data) {
+                debugger
                 console.log(data,typeof(data))
                 if(data.status == 0){
+                    debugger
                     location.reload()
                 }else {
+                    debugger
                     var error_obj = JSON.stringify(data.err_msg)  //转为字符串
                     $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
                         console.log(k,v)
@@ -161,18 +175,7 @@ window.onload=function(){
                         setTimeout(function (){$('.verfity_div').addClass('hide')},3000 )
                         }
                     )
-
-
-                     /*
-                    $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
-                        var tag = document.createElement('span');
-                        tag.className='error-msg';
-                        tag.innerHTML = v[0];
-                        $("input[name='"+k+"']").after(tag);
-                        }
-                    )
-                      */
-                    }
+                }
             }
         })
     })
@@ -181,11 +184,13 @@ window.onload=function(){
 /*--------------删除操作--------------------*/
     //环境、数据库详细信息删除
     $('.del_envDetail_btn').click(function () {
+        debugger
         $('.shadow,.tips').removeClass('hide')
 
         //获取当前删除所在行的字段值
         var h_id = $(this).parent().parent().attr('hid')
         var node = $(this).parent().parent().attr('node')
+        debugger
         console.log("删除行id为:",h_id)
         console.log("删除行所属node为:",node)
 
@@ -207,10 +212,13 @@ window.onload=function(){
             data:{'hid':$('.tips_footer').val(),'node':$('#node_v').val()},
             dataType:'JSON',
             success:function (data) {
+                debugger
                 console.log("后端返回数据：",data)
                 if(data.status == 0){
+                    debugger
                     location.reload()
                 }else {
+                    debugger
                     var error_obj = JSON.stringify(data.err_msg)  //转为字符串
                     console.log('error_obj:',error_obj,typeof(error_obj))
                     $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
@@ -255,10 +263,13 @@ window.onload=function(){
             data:$('#addEnvForm').serialize(),
             dataType:'JSON',
             success:function (data) {
+                debugger
                 console.log(data,typeof(data))
                 if(data.status == 0){
+                    debugger
                     location.reload()
                 }else {
+                    debugger
                     var error_obj = JSON.stringify(data.err_msg)  //转为字符串
                     console.log('error_obj:',error_obj,typeof(error_obj))
                     $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
@@ -283,10 +294,13 @@ window.onload=function(){
             data:$('#addDbForm').serialize(),
             dataType:'JSON',
             success:function (data) {
+                debugger
                 console.log(data,typeof(data))
                 if(data.status == 0){
+                    debugger
                     location.reload()
                 }else {
+                    debugger
                     var error_obj = JSON.stringify(data.err_msg)  //转为字符串
                     console.log('error_obj:',error_obj,typeof(error_obj))
                     $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()

@@ -45,10 +45,11 @@
             background-color: rgba(150, 132, 167, 0.32);
             text-align: center;
             line-height: 30px;
+            color: black;
         }
 
         .content_body .head .active{
-            background-color: #7a7f7f;
+            background-color: rgba(161, 159, 159, 0.8);
         }
 
         table{

@@ -285,7 +285,7 @@ class envDetail(View):
         return backService
 
     def getMiddleService(self):
-        middleService = models.EnvDetailInfo.objects.filter(env_sub_node=self.nid, service_model='微服务')
+        middleService = models.EnvDetailInfo.objects.filter(env_sub_node=self.nid, service_model='中间件')
         return middleService
 
     def getFtpService(self):

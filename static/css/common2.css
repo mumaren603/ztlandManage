@@ -1,0 +1,60 @@
+      .shadow{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: black;
+            opacity: 0.3;
+            z-index: 12;
+        }
+
+        .add_div, .edit_div{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            height: 400px;
+            width: 640px;
+            background: white;
+            border: 1px solid black;
+            margin-top: -200px;
+            margin-left: -320px;
+            /*overflow: auto;*/
+            z-index: 13;
+        }
+
+        .add_div_body,.edit_div_body{
+            position: relative;
+            padding:15px;
+        }
+
+        .add_div_footer,.edit_div_footer{
+            position: relative;
+            top: 190px;
+            padding: 15px;
+            text-align: right;
+        }
+
+        .add_tr ,.edit_tr{
+            position: relative;
+            height: 40px;
+            line-height: 40px;
+            width: 100%;
+        }
+
+        .add_td ,.edit_td{
+            float: left;
+        }
+
+        .add_h ,.edit_h{
+            float:left;
+            position: relative;
+            width: 130px;
+            text-align: right;
+        }
+
+        .add_c ,.edit_c{
+            float:left;
+            position: relative;
+            width: 160px;
+        }
