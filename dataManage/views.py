@@ -4,6 +4,9 @@ from django.views import View
 import json
 from commonManage import sqlQuery
 from commonManage.views import auth
+from commonManage.logFunc import loggerConf
+
+logger = loggerConf().getLogger()
 
 #数据管理
 @method_decorator(auth,name='dispatch')
@@ -17,7 +20,8 @@ class Data(View):
         djlx = request.POST.get('djlx')
         xzxx = request.POST.getlist('xzxx')
         sfpl = request.POST.get('sfpl')
-        print("请求参数是：", env, cqmc, djlx, xzxx, sfpl)
+        logger.debug("请求参数-->所属环境：%s，所属产权：%s，登记类型：%s，是否批量：%s" %(env, cqmc, djlx, sfpl))
+        logger.debug("请求参数-->限制信息：",xzxx)
 
         res_msg = {'status': 0, 'data': None, 'err_msg': None}
         if env and cqmc and djlx and sfpl:
@@ -72,7 +76,6 @@ class Data(View):
                             res_msg['data'] = 'null'
                             res_msg['err_msg'] = '查无数据！'
                         res_msg['data'] = queryRes
-                        print("草拟吗", res_msg)
                     else:
                         if not xzxx:
                             queryRes = sqlQuery.sqlQuery(env).getHouseFirstRegisterData()
@@ -80,7 +83,7 @@ class Data(View):
                         elif xzxx:
                             pass
                 else:
-                    print('转移、变更、注销流程')
+                    # 转移、变更、注销流程
                     if sfpl == 'y':
                         pass
                     else:
