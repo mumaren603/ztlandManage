@@ -1,6 +1,10 @@
 from django.shortcuts import render,redirect,HttpResponse
 from commonManage import models
 from django import forms
+from commonManage.logFunc import loggerConf
+
+logger = loggerConf().getLogger()
+
 import json
 
 # 登录
@@ -52,10 +56,10 @@ def getAuth(username):
     res = models.UserInfo.objects.filter(username=username)
     user_auth=[]
     for row in res:
-        print('用户名',row.username)
+        logger.debug('用户名:%s' % row.username)
         for v in row.auth_rel.all():
             user_auth.append(v.authcode)
-        print('用户权限', user_auth)
+        logger.debug('用户权限:%s'  % user_auth)
         return user_auth
 
 #主页
@@ -67,7 +71,7 @@ def index(request):
 
 
 '''校验模板，如环境详细信息校验模板，数据库校验模板'''
-# 定义校验模板 -->环境详情界面编辑弹出框/添加弹出框提交时字段校验.
+# 环境管理模块-->环境详情界面编辑弹出框/添加弹出框字段校验.
 class envDetailInfoValidTemplate(forms.Form):
     service_chinese_name = forms.CharField(error_messages={'required': '服务名不可为空！'})
     service_name = forms.CharField(error_messages={'required': '服务标识不可为空！'})
@@ -78,14 +82,14 @@ class envDetailInfoValidTemplate(forms.Form):
                                       )
     service_model = forms.CharField(error_messages={'required': '所属节点不可为空！'})
 
-# 定义添加主环境信息模板校验
+# 环境管理模块--> 环境主界面编辑弹出框/添加弹出框字段校验.
 class envValidTemplate(forms.Form):
     frontIP = forms.GenericIPAddressField(error_messages={'required': '前端IP地址不可为空！', 'invalid': '前端IP地址格式错误！'})
     backIP = forms.GenericIPAddressField(error_messages={'required': '后端IP地址不可为空！', 'invalid': '后端IP地址格式错误！'})
     dbIP = forms.GenericIPAddressField(error_messages={'required': '数据库IP地址不可为空！', 'invalid': '数据库IP地址格式错误！'})
     env_name = forms.CharField(error_messages={'required': '所属环境不可为空！'})
 
-# 定义校验模板 -->数据库详情界面编辑弹出框/添加弹出框提交时字段校验.
+# 环境管理模块--> 数据库详情界面编辑弹出框/添加弹出框字段校验.
 class dbDetailInfoValidTemplate(forms.Form):
     db_ip = forms.GenericIPAddressField(error_messages={'required': '数据库IP地址不可为空！', 'invalid': '数据库IP地址格式错误！'})
     db_port = forms.IntegerField(max_value=65535,
@@ -95,6 +99,14 @@ class dbDetailInfoValidTemplate(forms.Form):
     db_sid = forms.CharField(error_messages={'required': '数据库实例不可为空！'})
     db_user = forms.CharField(error_messages={'required': '数据库用户名不可为空！'})
     db_password = forms.CharField(error_messages={'required': '数据库密码不可为空！'})
+
+# 主机管理模块-->主机信息编辑弹出框/添加弹出框字段校验.
+class hostInfoValidTemplate(forms.Form):
+    intranetIP = forms.GenericIPAddressField(error_messages={'required': '内网IP地址不可为空！', 'invalid': '内网IP地址格式错误！'})
+    serverType = forms.CharField(error_messages={'required': '机器类型不可为空！'})
+    serverOs = forms.CharField(error_messages={'required': '操作系统不可为空！'})
+    serverAccount = forms.CharField(error_messages={'required': '用户名不可为空！'})
+    serverPassword = forms.CharField(error_messages={'required': '密码不可为空！'})
 
 
 '''数据库通用操作，包括数据库连接，释放，查询等'''
@@ -108,12 +120,12 @@ class DBAction():
     def SqlExecute(self,sql):
         try:
             res = self.cursor.execute(sql)
-            print("执行的sql：%s" % sql)
+            logger.debug("执行的sql：%s" % sql)
             queryResult = res.fetchone()    # 元祖
             return queryResult
         except Exception as e:
             raise
-            print('异常：',e)
+            logger.error("异常信息：%s" % e)
 
     def closeConn(self):
         if self.cursor:
