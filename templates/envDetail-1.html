@@ -89,8 +89,8 @@
             </form>
         </div>
         <div class="edit_div_footer">
-            <input id="editEnvConfirmBtn" type="button" value="确定">
-            <input id="editEnvCancelBtn" type="button" value="取消">
+            <button type="button" id="editEnvConfirmBtn">确定</button>
+            <button type="button" id="editEnvCancelBtn">取消</button>
         </div>
     </div>
     <!--数据库编辑弹窗信息-->
@@ -157,8 +157,8 @@
             </form>
         </div>
         <div class="edit_div_footer">
-            <input id="editDbConfirmBtn" type="button" value="确定">
-            <input id="editDbCancelBtn" type="button" value="取消">
+            <button type="button" id="editDbConfirmBtn">确定</button>
+            <button type="button" id="editDbCancelBtn">取消</button>
         </div>
     </div>
     <!--编辑弹出框校验信息弹出框 -->
@@ -173,8 +173,8 @@
         <div class="tips_footer" name="hid">
             <!--这行主要获取前端所属node,便于后端在同个删除方法中通过这个值判断是删除环境信息还是数据库信息-->
             <div id="node_v" style="display: none" name="node"></div>
-            <button id="delEnvDetailConfirmBtn">确定</button>
-            <button id="delEnvDetailCancelBtn">取消</button>
+            <button type="button" id="delEnvDetailConfirmBtn">确定</button>
+            <button type="button" id="delEnvDetailCancelBtn">取消</button>
         </div>
     </div>
     <!--添加服务信息-->
@@ -259,8 +259,8 @@
             </form>
         </div>
         <div class="add_div_server_footer">
-            <input id="addEnvConfirmBtn" type="button" value="保存">
-            <input id="addEnvCancelBtn" type="button" value="取消">
+            <button type="button" id="addEnvConfirmBtn">保存</button>
+            <button type="button" id="addEnvCancelBtn">取消</button>
         </div>
     </div>
     <!--添加数据库信息-->
@@ -327,209 +327,20 @@
             </form>
         </div>
         <div class="add_div_db_footer">
-            <input id="addDbConfirmBtn" type="button" value="保存">
-            <input id="addDbCancelBtn" type="button" value="取消">
+            <button type="button" id="addDbConfirmBtn">保存</button>
+            <button type="button" id="addDbCancelBtn">取消</button>
         </div>
     </div>
 
-    <!--内容-->
-{#    <div class="content">#}
-{#        <div class="content_b">#}
-{#            <div class="content_add" auth="{{ auth }}">#}
-{#                <input id="addDbDetailBtn" style="display: none" type="button" value="添加数据库信息">#}
-{#                <input id="addEnvDetailBtn" style="display: none" type="button" value="添加服务信息">#}
-{#            </div>#}
-{##}
-{#            <div class="content_b_m" style="width: 100%">#}
-{#                <div class="menu_item left active" a="1">前端信息</div>#}
-{#                <div class="menu_item left" a="2">后端信息</div>#}
-{#                <div class="menu_item left" a="3">微服务信息</div>#}
-{#                <div class="menu_item left" a="4">FTP信息</div>#}
-{#                <div class="menu_item left" a="5">数据库信息</div>#}
-{#            </div>#}
-{##}
-{#            <div class="content_b_c">#}
-{#                <div b="1">#}
-{#                    <table>#}
-{#                        <thead>#}
-{#                            <tr>#}
-{#                                <th width="3%">序号</th>#}
-{#                                <th width="10%">服务名</th>#}
-{#                                <th width="10%">服务标识</th>#}
-{#                                <th width="10%">主机IP</th>#}
-{#                                <th width="10%">服务端口</th>#}
-{#                                <th width="10%">访问地址</th>#}
-{#                                <th width="20%">部署包路径</th>#}
-{#                                <th width="10%">操作</th>#}
-{#                            </tr>#}
-{#                        </thead>#}
-{#                        <tbody>#}
-{#                        {% for row in frontService %}#}
-{#                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">#}
-{#                                <td>{{ forloop.counter }}</td>#}
-{#                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>#}
-{#                                <td name="service_name">{{ row.service_name }}</td>#}
-{#                                <td name="service_host">{{ row.service_host }}</td>#}
-{#                                <td name="service_port">{{ row.service_port }}</td>#}
-{#                                <td name="service_url">{{ row.service_url }}</td>#}
-{#                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>#}
-{#                                <td>#}
-{#                                    <input class="edit_envDetail_btn" style="display: none" type="button" value="编辑">#}
-{#                                    <input class="del_envDetail_btn" style="display: none" type="button" value="删除">#}
-{#                                </td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                </div>#}
-{#                <div class="hide" b="2">#}
-{#                    <div class="body">#}
-{#                         <table>#}
-{#                        <thead>#}
-{#                        <tr>#}
-{#                            <th width="3%">序号</th>#}
-{#                            <th width="10%">服务名</th>#}
-{#                            <th width="10%">服务标识</th>#}
-{#                            <th width="10%">主机IP</th>#}
-{#                            <th width="10%">服务端口</th>#}
-                            {#                            <th width="10%">访问地址</th>#}
-{#                            <th width="20%">部署包路径</th>#}
-{#                            <th width="10%">操作</th>#}
-{#                        </tr>#}
-{#                        </thead>#}
-{#                        <tbody>#}
-{#                        {% for row in backService %}#}
-{#                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">#}
-{#                                <td>{{ forloop.counter }}</td>#}
-{#                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>#}
-{#                                <td name="service_name">{{ row.service_name }}</td>#}
-{#                                <td name="service_host">{{ row.service_host }}</td>#}
-{#                                <td name="service_port">{{ row.service_port }}</td>#}
-                                {#                            <td name="service_url">{{ row.service_url }}</td>#}
-{#                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>#}
-{#                                <td>#}
-{#                                    <input class="edit_envDetail_btn" style="display: none" type="button" value="编辑">#}
-{#                                    <input class="del_envDetail_btn" style="display: none" type="button" value="删除">#}
-{#                                </td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                    </div>#}
-{#                    <div class="footer">#}
-{#                        <div style="text-align: right;padding-right: 10px">#}
-{#                             {{ page_str }}#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="hide" b="3">#}
-{#                    <table>#}
-{#                        <thead>#}
-{#                            <tr>#}
-{#                                <th width="3%">序号</th>#}
-{#                                <th width="10%">服务名</th>#}
-{#                                <th width="10%">服务标识</th>#}
-{#                                <th width="10%">主机IP</th>#}
-{#                                <th width="10%">服务端口</th>#}
-{#                                <th width="10%">访问地址</th>#}
-{#                                <th width="20%">部署包路径</th>#}
-{#                                <th width="10%">操作</th>#}
-{#                            </tr>#}
-{#                        </thead>#}
-{#                        <tbody>#}
-{#                        {% for row in microService %}#}
-{#                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">#}
-{#                                <td>{{ forloop.counter }}</td>#}
-{#                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>#}
-{#                                <td name="service_name">{{ row.service_name }}</td>#}
-{#                                <td name="service_host">{{ row.service_host }}</td>#}
-{#                                <td name="service_port">{{ row.service_port }}</td>#}
-{#                                <td name="service_url">{{ row.service_url }}</td>#}
-{#                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>#}
-{#                                <td>#}
-{#                                    <input class="edit_envDetail_btn" style="display: none" type="button" value="编辑">#}
-{#                                    <input class="del_envDetail_btn" style="display: none" type="button" value="删除">#}
-{#                                </td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                </div>#}
-{#                <div class="hide" b="4">#}
-{#                    <table>#}
-{#                        <thead>#}
-{#                            <tr>#}
-{#                                <th width="3%">序号</th>#}
-{#                                <th width="8%">服务名</th>#}
-{#                                <th width="8%">服务标识</th>#}
-{#                                <th width="8%">主机IP</th>#}
-{#                                <th width="8%">服务端口</th>#}
-{#                                <th width="10%">访问地址</th>#}
-{#                                <th width="20%">登录口令</th>#}
-{#                                <th width="8%">操作</th>#}
-{#                            </tr>#}
-{#                        </thead>#}
-{#                        <tbody>#}
-{#                        {% for row in FtpService %}#}
-{#                            <tr hid="{{ row.s_id }}" node="{{ row.service_model }}">#}
-{#                                <td>{{ forloop.counter }}</td>#}
-{#                                <td name="service_chinese_name">{{ row.service_chinese_name }}</td>#}
-{#                                <td name="service_name">{{ row.service_name }}</td>#}
-{#                                <td name="service_host">{{ row.service_host }}</td>#}
-{#                                <td name="service_port">{{ row.service_port }}</td>#}
-{#                                <td name="service_url">{{ row.service_url }}</td>#}
-{#                                <td name="service_deploy_path">{{ row.service_deploy_path }}</td>#}
-{#                                <td>#}
-{#                                    <input class="edit_envDetail_btn" style="display: none" type="button" value="编辑">#}
-{#                                    <input class="del_envDetail_btn" style="display: none" type="button" value="删除">#}
-{#                                </td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                </div>#}
-{#                <div class="hide" b="5">#}
-{#                    <table>#}
-{#                        <thead>#}
-{#                            <tr>#}
-{#                                <th width="3%">序号</th>#}
-{#                                <th width="15%">库名</th>#}
-{#                                <th width="10%">数据库IP</th>#}
-{#                                <th width="10%">数据库端口</th>#}
-{#                                <th width="10%">数据库实例</th>#}
-{#                                <th width="10%">用户名</th>#}
-{#                                <th width="15%">密码</th>#}
-{#                                <th width="15%">操作</th>#}
-{#                            </tr>#}
-{#                        </thead>#}
-{#                        <tbody>#}
-{#                        {% for row in dbService %}#}
-{#                            <tr hid="{{ row.db_id}}">#}
-{#                                <td>{{ forloop.counter }}</td>#}
-{#                                <td name="db_password">{{ row.name }}</td>#}
-{#                                <td name="db_ip">{{ row.ip }}</td>#}
-{#                                <td name="db_port">{{ row.port }}</td>#}
-{#                                <td name="db_sid">{{ row.sid }}</td>#}
-{#                                <td name="db_name">{{ row.user }}</td>#}
-{#                                <td name="db_user">{{ row.password }}</td>#}
-{#                                <td>#}
-{#                                    <input class="edit_dbDetail_btn" style="display: none" type="button" value="编辑">#}
-{#                                    <input class="del_envDetail_btn" style="display: none" type="button" value="删除">#}
-{#                                </td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
 
+    <!--内容-->
     <div class="content">
         <div class="content_header" auth="{{ auth }}">
-            <input id="addDbDetailBtn" style="display: none" type="button" value="添加数据库信息">
-            <input id="addEnvDetailBtn" style="display: none" type="button" value="添加服务信息">
+            <button type="button" id="addDbDetailBtn" style="display: none">添加数据库信息</button>
+            <button type="button" id="addEnvDetailBtn" style="display: none">添加服务信息</button>
         </div>
+
+        {% block envDetail %}
         <div class="content_body">
             <div class="head">
                 <a href="/envManage/env/detail-{{ env_node_id }}-1"><div class="menu_item left active" a="1">前端信息</div></a>
@@ -564,8 +375,8 @@
 {#                                <td name="service_url">{{ row.service_url }}</td>#}
                                 <td name="service_deploy_path">{{ row.service_deploy_path }}</td>
                                 <td>
-                                    <input class="edit_envDetail_btn" style="display: none" type="button" value="编辑">
-                                    <input class="del_envDetail_btn" style="display: none" type="button" value="删除">
+                                    <button type="button" class="edit_envDetail_btn" style="display: none" >编辑</button>
+                                    <button type="button" class="del_envDetail_btn" style="display: none" >删除</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -579,7 +390,9 @@
                 </div>
             </div>
         </div>
+        {% endblock %}
     </div>
+
 {% endblock %}
 
 {% block js %}
