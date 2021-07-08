@@ -1,8 +1,8 @@
 {% extends "index.html" %}
 {% block css %}
+    <link rel="stylesheet" href="/static/css/tips.css">
     <link rel="stylesheet" href="/static/css/env.css">
     <link rel="stylesheet" href="/static/css/host.css">
-{#    <link rel="stylesheet" href="/static/css/common2.css">#}
 {% endblock %}
 
 {% block content %}
@@ -12,162 +12,246 @@
     <div class="add_div hide">
         <div class="add_div_body">
             <form id="add_form">
-                <!--主环境信息-->
-                <div class="add_tr">
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>前端IP：</label>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>内网IP：</label>
                         </div>
-                        <div class="add_c">
-                            <input type="text" name="frontIP">
-                        </div>
-                    </div>
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>后端IP：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="backIP">
-                        </div>
-                </div>
-                </div>
-                <div class="add_tr">
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>数据库IP：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="dbIP">
+                        <div class="edit_c">
+                            <input type="text" name="intranetIP">
                         </div>
                     </div>
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label>状态：</label>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>外网IP：</label>
                         </div>
-                        <div class="add_c">
-                            <input type="text" name="status">
+                        <div class="edit_c">
+                            <input type="text" name="extrantIP">
                         </div>
                 </div>
                 </div>
-                <div class="add_tr">
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>所属环境：</label>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>机器类型：</label>
                         </div>
-                        <div class="add_c">
-                            <input type="text" name="env_name">
+                        <div class="edit_c">
+                            <select name="serverType">
+                                <option value="实体机">实体机</option>
+                                <option value="虚拟机">虚拟机</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>机器用途：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="serverPurpose">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>用户名：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="serverAccount">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>密码：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="serverPassword">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>操作系统：</label>
+                        </div>
+                        <div class="edit_c">
+                            <select name="serverOs">
+                                <option value="Linux">Linux</option>
+                                <option value="WindowsServer">WindowsServer</option>
+                                <option value="Windows7">Windows7</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>宿主机：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="originServer">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="add_div_footer">
-            <input id="add_confirm_btn" type="button" value="保存">
-            <input id="add_cancel_btn" type="button" value="取消">
+            <button id="add_confirm_btn">保存</button>
+            <button id="add_cancel_btn">取消</button>
         </div>
     </div>
     <!--编辑-->
     <div class="edit_div hide">
         <div class="edit_div_body">
             <form id="edit_form">
-                <!--主环境信息-->
                 <div style="display: none">
                         <input type="text" name="s_id">
                 </div>
                 <div class="edit_tr">
                     <div class="edit_td">
                         <div class="edit_h">
-                            <label><i style="color: red">*</i>前端IP：</label>
+                            <label><i style="color: red">*</i>内网IP：</label>
                         </div>
                         <div class="edit_c">
-                            <input type="text" name="frontIP">
+                            <input type="text" name="intranetIP">
                         </div>
                     </div>
                     <div class="edit_td">
                         <div class="edit_h">
-                            <label><i style="color: red">*</i>后端IP：</label>
+                            <label>外网IP：</label>
                         </div>
                         <div class="edit_c">
-                            <input type="text" name="backIP">
+                            <input type="text" name="extrantIP">
                         </div>
                 </div>
                 </div>
                 <div class="edit_tr">
                     <div class="edit_td">
                         <div class="edit_h">
-                            <label><i style="color: red">*</i>数据库IP：</label>
+                            <label><i style="color: red">*</i>机器类型：</label>
                         </div>
                         <div class="edit_c">
-                            <input type="text" name="dbIP">
+                            <select name="serverType">
+                                <option value="实体机">实体机</option>
+                                <option value="虚拟机">虚拟机</option>
+                            </select>
                         </div>
                     </div>
                     <div class="edit_td">
                         <div class="edit_h">
-                            <label>状态：</label>
+                            <label>机器用途：</label>
                         </div>
                         <div class="edit_c">
-                            <input type="text" name="status">
+                            <input type="text" name="serverPurpose">
                         </div>
-                </div>
+                    </div>
                 </div>
                 <div class="edit_tr">
                     <div class="edit_td">
                         <div class="edit_h">
-                            <label><i style="color: red">*</i>所属环境：</label>
+                            <label><i style="color: red">*</i>用户名：</label>
                         </div>
                         <div class="edit_c">
-                            <input type="text" name="env_name">
+                            <input type="text" name="serverAccount">
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>密码：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="serverPassword">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit_tr">
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label><i style="color: red">*</i>操作系统：</label>
+                        </div>
+                        <div class="edit_c">
+                            <select name="serverOs">
+                                <option value="Linux">Linux</option>
+                                <option value="WindowsServer">WindowsServer</option>
+                                <option value="Windows7">Windows7</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_td">
+                        <div class="edit_h">
+                            <label>宿主机：</label>
+                        </div>
+                        <div class="edit_c">
+                            <input type="text" name="originServer">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="edit_div_footer">
-            <input id="edit_confirm_btn" type="button" value="保存">
-            <input id="edit_cancel_btn" type="button" value="取消">
+            <button id="edit_confirm_btn">保存</button>
+            <button id="edit_cancel_btn">取消</button>
+        </div>
+    </div>
+    <!--删除询问弹出框-->
+    <div class="tips hide">
+        <div class="tips_head">提示<br></div>
+        <div class="tips_body">您确定删除该条主机信息？</div>
+        <div class="tips_footer" name="hid">
+            <button id="delHostConfirmBtn">确定</button>
+            <button id="delHostCancelBtn">取消</button>
         </div>
     </div>
 
 
     <div class="host">
         <div class="query">
-            <form id="queryForm">
-                <div class="query_1">
-                <div class="query_2 left">
-                    <div class="query_n left">内网IP：</div>
-                    <div class="query_i left"><input type="text" name="intranetIP"></div>
-                </div>
-                <div class="query_2 left">
-                    <div class="query_n left">外网IP：</div>
-                    <div class="query_i left"><input type="text" name="extrantIP"></div>
-                </div>
-                <div class="query_2 left">
-                    <div class="query_n left">机器类型：</div>
-                    <div class="query_i left">
-                        <select style="width: 194px;height: 26px;" name="serverType">
-                            <option value="">请选择</option>
-                            <option value="实体机">实体机</option>
-                            <option value="虚拟机">虚拟机</option>
-                        </select>
+            <form id="queryForm" action="/hostManage/host" method="post" onsubmit="return checkHost()">
+                <div class="query_tr">
+                    <div class="query_td left">
+                        <div class="query_n left">内网IP：</div>
+                        <div class="query_c left">
+                            <input type="text" name="intranetIP">
+                        </div>
+                    </div>
+                    <div class="query_td left">
+                        <div class="query_n left">外网IP：
+                        </div>
+                        <div class="query_c left">
+                            <input type="text" name="extrantIP">
+                        </div>
+                    </div>
+                    <div class="query_td left">
+                        <div class="query_n left">机器类型：
+                        </div>
+                        <div class="query_c left">
+                            <select style="width: 194px;height: 26px;" name="serverType">
+                                <option value="">请选择</option>
+                                <option value="实体机">实体机</option>
+                                <option value="虚拟机">虚拟机</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-                <div class="query_1">
-                <div class="query_2 left">
-                    <div class="query_n left">操作系统：</div>
-                    <div class="query_i left">
-                        <select style="width: 194px;height: 26px;" name="serverOs">
-                            <option value="">请选择</option>
-                            <option value="Linux">Linux</option>
-                            <option value="WindowsServer">WindowsServer</option>
-                            <option value="Windows7">Windows7</option>
-                        </select>
+                <div class="query_tr">
+                    <div class="query_td left">
+                        <div class="query_n left">操作系统：</div>
+                        <div class="query_c left">
+                            <select style="width: 194px;height: 26px;" name="serverOs">
+                                <option value="">请选择</option>
+                                <option value="Linux">Linux</option>
+                                <option value="WindowsServer">WindowsServer</option>
+                                <option value="Windows7">Windows7</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="query_td left" >
+                        <div class="query_c left" style="padding-left:20px;">
+                            <button id="queryBtn" type="submit" auth="{{ auth }}">查询</button>
+                        </div>
+                    </div>
+                    <div class="query_td left" style="text-align: right">
+                        <button id="addHostbtn" type="button" style="display: none">添加</button>
                     </div>
                 </div>
-                <div class="query_2 left">
-                    <div class="query_i left" style="padding-left:20px;"><input  id="queryBtn" style="width:60px;height:26px;background-color: blue" type="button" value="查询"></div>
-                </div>
-            </div>
             </form>
         </div>
         <div class="result">
@@ -175,35 +259,35 @@
                 <thead>
                     <tr>
                         <th style="width: 3%">序号</th>
-                        <th style="width: 8%">内网IP</th>
-                        <th style="width: 8%">外网IP</th>
-                        <th style="width: 8%">机器类型</th>
+                        <th style="width: 7%">内网IP</th>
+                        <th style="width: 7%">外网IP</th>
+                        <th style="width: 7%">机器类型</th>
                         <th style="width: 12%">机器用途</th>
                         <th style="width: 10%">操作系统</th>
                         <th style="width: 8%">用户名</th>
                         <th style="width: 8%">密码</th>
-                        <th style="width: 8%">宿主机</th>
-{#                        <th style="width: 8%">操作</th>#}
+                        <th style="width: 7%">宿主机</th>
+                        <th style="width: 8%">操作</th>
                     </tr>
                 </thead>
                 <tbody id="texts">
-{#                    {% for row in queryRes %}#}
-{#                        <tr>#}
-{#                            <td>{{ forloop.counter }}</td>#}
-{#                            <td>{{ row.intranetIP }}</td>#}
-{#                            <td>{{ row.extrantIP }}</td>#}
-{#                            <td>{{ row.serverType }}</td>#}
-{#                            <td>{{ row.serverPurpose }}</td>#}
-{#                            <td>{{ row.serverOs }}</td>#}
-{#                            <td>{{ row.serverAccount }}</td>#}
-{#                            <td>{{ row.serverPassword }}</td>#}
-{#                            <td>{{ row.originServer }}</td>#}
-{#                            <td>#}
-{#                                <input class="edit_host_btn" type="button" value="编辑">#}
-{#                                <input class="del_host_btn" type="button" value="删除">#}
-{#                            </td>#}
-{#                        </tr>#}
-{#                    {% endfor%}#}
+                    {% for row in queryHostResToList %}
+                        <tr hid="{{ row.id }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td name="intranetIP">{{ row.intranetIP }}</td>
+                            <td name="extrantIP">{{ row.extrantIP }}</td>
+                            <td name="serverType">{{ row.serverType }}</td>
+                            <td name="serverPurpose">{{ row.serverPurpose }}</td>
+                            <td name="serverOs">{{ row.serverOs }}</td>
+                            <td name="serverAccount">{{ row.serverAccount }}</td>
+                            <td name="serverPassword">{{ row.serverPassword }}</td>
+                            <td name="originServer">{{ row.originServer }}</td>
+                            <td>
+                                <button class="edit_host_btn" style="display: none">编辑</button>
+                                <button class="del_host_btn" style="display: none">删除</button>
+                            </td>
+                        </tr>
+                    {% endfor%}
                 </tbody>
             </table>
         </div>
@@ -218,164 +302,7 @@
 {% block js %}
     <script src="/static/js/env.js"></script>
     <script src="/static/js/jquery.min.js"></script>
-{#    <script src="/static/js/host.js"></script>#}
-    <script>
-        // 查询
-        $('#queryBtn').click(function () {
-            var  intranetIP = $('#queryForm').find('input[name="intranetIP"]').val()
-            var  extrantIP = $('#queryForm').find('input[name="extrantIP"]').val()
-            var  serverType = $('#queryForm').find('select[name="serverType"]').val()
-            var  serverOs = $('#queryForm').find('select[name="serverOs"]').val()
-            if ((intranetIP == undefined || intranetIP == '' || intranetIP == null) && (extrantIP == undefined || extrantIP == '' || extrantIP == null) && (serverType == undefined || serverType == '' || serverType == null) && (serverOs == undefined || serverOs == '' || serverOs == null)){
-                debugger
-                // 查不到数据界面提示
-                $('.verfity_div').removeClass('hide')
-                $('#verfityInfo').text('请至少输入一个查询条件！')
-                // 弹出框提示3秒后消失
-                setTimeout(function (){$('.verfity_div').addClass('hide')},3000 )
-                $('#texts').html("")
-            }
-
-            else{
-                debugger
-                $.ajax({
-                    url:'/hostManage/host',
-                    type:'POST',
-                    data:$('#queryForm').serialize(),
-                    dataType:'JSON',
-                    success:function (data) {
-                        debugger
-                        console.log('data',data)
-                        if (data == null || data == '')
-                        {
-                            // 查不到数据界面提示
-                            $('.verfity_div').removeClass('hide')
-                            $('#verfityInfo').text('没有查询到数据！')
-                            // 弹出框提示3秒后消失
-                            setTimeout(function (){$('.verfity_div').addClass('hide')},3000 )
-                            $('#texts').html("")
-                        }else{
-                            var html = ""
-                            for(var i=0;i < data.length;i++){
-                                html += '<tr><td>' + (Number(i)+Number('1') )+ '</td>' +
-                                    '<td>' + data[i].intranetIP + '</td>' +
-                                    '<td>' + data[i].extrantIP + '</td>' +
-                                    '<td>' + data[i].serverType + '</td>' +
-                                    '<td>' + data[i].serverPurpose + '</td>' +
-                                    '<td>' + data[i].serverOs + '</td>' +
-                                    '<td>' + data[i].serverAccount + '</td>' +
-                                    '<td>' + data[i].serverPassword + '</td>' +
-                                    '<td>' + data[i].originServer + '</td></tr>'
-                                    {##}
-                                    {#'<td><input class="edit_host_btn" type="button" value="编辑">'+#}
-                                    {#'<input class="del_host_btn" type="button" value="删除"></td></tr>'#}
-                            }
-                            $('#texts').html(html)
-                        }
-                    }
-                })
-            }
-            })
-
-        //编辑
-        $('.edit_host_btn').click(function () {
-        debugger
-        console.log('编辑。。。')
-        $('.shadow,.edit_div').removeClass('hide')
-
-        //获取当前编辑所在行的字段值
-        var h_id = $(this).parent().parent().attr('hid')
-        var frontIP = $(this).parent().parent().children('td[name="frontIP"]').text()
-        var backIP = $(this).parent().parent().children('td[name="backIP"]').text()
-        var dbIP = $(this).parent().parent().children('td[name="dbIP"]').text()
-        var env_name = $(this).parent().parent().children('td[name="env_name"]').text()
-        var status = $(this).parent().parent().children('td[name="status"]').text()
-
-        //编辑框回填字段值
-        $('#edit_form').find('input[name="s_id"]').val(h_id)
-        $('#edit_form').find('input[name="frontIP"]').val(frontIP)
-        $('#edit_form').find('input[name="backIP"]').val(backIP)
-        $('#edit_form').find('input[name="dbIP"]').val(dbIP)
-        $('#edit_form').find('input[name="env_name"]').val(env_name)
-        $('#edit_form').find('input[name="status"]').val(status)
-    })
-
-    //编辑取消
-    $('#edit_cancel_btn').click(function () {
-        $('.shadow,.edit_div').addClass('hide')
-    })
-
-    //编辑确定
-    $('#edit_confirm_btn').click(function(){
-        $.ajax({
-            url:'/envManage/env/edit',
-            type:'POST',
-            data:$('#edit_form').serialize(),
-            dataType:'JSON',
-            success:function (data) {
-                console.log("后端返回数据：",data)
-                if(data.status == 0){
-                    location.reload()
-                }else {
-                    var error_obj = JSON.stringify(data.err_msg)  //转为字符串
-                    console.log('error_obj:',error_obj,typeof(error_obj))
-                    $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
-                        console.log('#####',k,v)
-                        // 如果前端值在后端处理有问题，那么通过弹出框显示错误信息
-                        $('.verfity_div').removeClass('hide')
-                        $('#verfityInfo').text(v)
-                        // 弹出框提示3秒后消失
-                        setTimeout(function (){$('.verfity_div').addClass('hide')},3000 )
-                        })
-                }
-            }
-        })
-    })
-
-    //删除
-    $('.del_env_btn').click(function () {
-        $('.shadow,.tips').removeClass('hide')
-
-        //获取当前删除所在行的字段值
-        var h_id = $(this).parent().parent().attr('hid')
-        console.log("环境主信息删除行id为:",h_id)
-
-        //将当前行id传递到弹出框中
-        $('.tips').find('div[name="hid"]').val(h_id)
-    })
-
-    //删除取消
-    $('#delEnvCancelBtn').click(function () {
-        $('.shadow,.tips').addClass('hide')
-    })
-
-    //删除确定
-    $('#delEnvConfirmBtn').click(function(){
-        $.ajax({
-            url:'/envManage/env/del',
-            type:'POST',
-            data:{'hid':$('.tips_footer').val()},
-            dataType:'JSON',
-            success:function (data) {
-                console.log("后端返回数据：",data)
-                if(data.status == 0){
-                    location.reload()
-                }else {
-                    var error_obj = JSON.stringify(data.err_msg)  //转为字符串
-                    console.log('error_obj:',error_obj,typeof(error_obj))
-                    $.each($.parseJSON(error_obj),function(k,v){  //后端传过来是json对象，前端需要转为js对象，需要做个转换JSON.parse() 或者 jQuery $.parseJSON()
-                        console.log('#####',k,v)
-                        // 如果前端值在后端处理有问题，那么通过弹出框显示错误信息
-                        $('.verfity_div').removeClass('hide')
-                        $('#verfityInfo').text(v)
-                        // 弹出框提示3秒后消失
-                        setTimeout(function (){$('.verfity_div').addClass('hide')},3000 )
-                        })
-                }
-            }
-        })
-    })
-    </script>
+    <script src="/static/js/host.js"></script>
 {% endblock %}
 
 
