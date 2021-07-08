@@ -1,120 +1,23 @@
-{% extends "index.html" %}
-{% block css %}
-    <link rel="stylesheet" href="/static/css/env.css">
+<!--除了tbody下展示内容有所不同，其余都继承env.html-->
+{% extends "env.html" %}
+{% block env %}
+    <tbody>
+    <tr hid="{{ queryRes.m_id }}">
+        <td>{{ queryRes.m_id }}</td>
+        <td name="env_name">{{ queryRes.env_name }}</td>
+        <td name="frontIP">{{ queryRes.frontIP }}</td>
+        <td name="backIP">{{ queryRes.backIP }}</td>
+        <td name="dbIP">{{ queryRes.dbIP }}</td>
+        <td name="status">{{ queryRes.status }}</td>
+        <td>
+            <button type="button" class="edit_env_btn" style="display: none">编辑</button>
+            <button type="button" class="del_env_btn" style="display: none">删除</button>
+            <a href="/envManage/env/detail-{{ queryRes.m_id }}-1">
+                <button type="button">详情</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
 {% endblock %}
-
-{% block content %}
-    <!--添加-->
-    <div class="add_div hide">
-        <div class="add_div_body">
-            <form id="add_form">
-                <!--主环境信息-->
-                <div class="add_tr">
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>前端IP：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="frontIP">
-                        </div>
-                    </div>
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>后端IP：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="backIP">
-                        </div>
-                </div>
-                </div>
-                <div class="add_tr">
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>数据库IP：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="dbIP">
-                        </div>
-                    </div>
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label>状态：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="status">
-                        </div>
-                </div>
-                </div>
-                <div class="add_tr">
-                    <div class="add_td">
-                        <div class="add_h">
-                            <label><i style="color: red">*</i>所属环境：</label>
-                        </div>
-                        <div class="add_c">
-                            <input type="text" name="env_name">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="add_div_footer">
-            <input id="add_confirm_btn" type="button" value="保存">
-            <input id="add_cancel_btn" type="button" value="取消">
-        </div>
-    </div>
-    <!--添加弹出框校验信息弹出框 -->
-    <div class="verfity_div hide">
-        <div id="tips"></div>
-        <div id="verfityInfo"></div>
-    </div>
-    <div class="content">
-        <div class="env_h">环境信息</div>
-        <div class="env_b">
-            <div class="header">
-                <div class="i2 left">
-                    <form action="/envManage/env/query" method="post">
-                        环境信息 <input type="text" id="searchParam" name="searchParam" placeholder="请输入查询环境信息">
-                        <input type="submit" id="searchBtn" value="查询">
-                    </form>
-                </div>
-                <div class="i3 left">
-                    <input id="addEnvInfo" type="button" value="添加环境信息">
-                </div>
-            </div>
-            <div class="body">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 10%;">序号</th>
-                            <th style="width: 15%;">所属环境</th>
-                            <th style="width: 15%;">前端IP</th>
-                            <th style="width: 15%;">后端IP</th>
-                            <th style="width: 15%;">数据库IP</th>
-                            <th style="width: 15%;">状态</th>
-                            <th style="width: 15%;">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ queryRes.m_id }}</td>
-                            <td>{{ queryRes.env_name }}</td>
-                            <td>{{ queryRes.frontIP }}</td>
-                            <td>{{ queryRes.backIP }}</td>
-                            <td>{{ queryRes.dbIP }}</td>
-                            <td>{{ queryRes.status }}</td>
-                            <td><a href="/envManage/env/detail-{{ queryRes.m_id}}-1"><button>详细信息</button></a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="footer"></div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block js %}
-    <script src="/static/js/env.js"></script>
-{% endblock %}
-
 
 
