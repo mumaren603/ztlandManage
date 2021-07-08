@@ -6,6 +6,10 @@ from commonManage.views import envDetailInfoValidTemplate,envValidTemplate,dbDet
 import json
 from commonManage.views import getAuth,auth
 from commonManage.views import Page
+from commonManage.logFunc import loggerConf
+
+logger = loggerConf().getLogger()
+
 
 '''环境主信息操作'''
 # 获取主信息
@@ -13,13 +17,18 @@ from commonManage.views import Page
 def env(request):
     if request.method == 'GET':
         envInfo = models.EnvInfo.objects.all()
-        print(envInfo)
+        if envInfo:
+            logger.debug("主环境信息：%s" %envInfo)
+        else:
+            logger.error("未查询到主环境信息")
+
         # 获取权限
         auth = getAuth(request.session.get('username'))
 
         # 获取数据总条数
         env_count = len(envInfo)
-        print("环境信息总条数是：%d" % env_count)
+        logger.debug("环境信息总条数是：%d" % env_count)
+        # print("环境信息总条数是：%d" % env_count)
 
         # 获取当前页码
         current_page = request.GET.get('p', 1)
@@ -33,7 +42,8 @@ def env(request):
         page_obj = Page(current_page, env_count, val)
 
         envInfo = envInfo[page_obj.start:page_obj.end]
-        print('当前页码对应的数据为：%s' %envInfo)
+        # print('当前页码对应的数据为：%s' %envInfo)
+        logger.debug('当前页码对应的数据为：%s' %envInfo)
 
         page_str = page_obj.page_str("/envManage/env")
 
@@ -66,9 +76,9 @@ def envAdd(request):
                     status=status
                 )
             except Exception as e:
-                # print(e)                  #后期处理成记录到日志
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
+                logger.error("请求异常：%s" %e)
         else:
             res_msg['status'] = 1
             res_msg['err_msg'] = obj.errors
@@ -100,9 +110,9 @@ def envEdit(request):
                     status=status
                 )
             except Exception as e:
-                print('ERROR',e)
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
+                logger.error("请求异常：%s" % e)
         else:
             res_msg['status'] = 1
             res_msg['err_msg'] = obj.errors
@@ -115,33 +125,33 @@ def envDel(request):
         res_msg = {'status': 0, 'err_msg': None}
 
         hid = request.POST.get('hid')
-        print('删除主环境id为：',hid)
+        logger.debug('删除主环境id为：%s' %hid)
 
         if hid:
             try:
                 # 这部分主要为了记录删除数据到日志中
                 obj = models.EnvDetailInfo.objects.filter(env_sub_node_id=hid).values()
-                print("删除前EnvDetailInfo表中存在%d条数据" %len(obj))
+                logger.debug("删除前EnvDetailInfo表中存在%d条数据" %len(obj))
 
                 if len(obj)>0:
                     for row in obj:
-                        print("删除数据为%s" %row)
+                        logger.debug("删除数据为%s" %row)
 
                 # 删除操作
                 models.EnvDetailInfo.objects.filter(env_sub_node_id=hid).delete()
 
                 del_obj = models.EnvDetailInfo.objects.filter(env_sub_node_id=hid).values()
-                print("EnvDetailInfo表数据删除结束，表中存在%d条数据" %len(del_obj))
+                logger.debug("EnvDetailInfo表数据删除结束，表中存在%d条数据" %len(del_obj))
                 # 子表数据删除完则执行主表数据删除
                 if not del_obj:
                     models.EnvInfo.objects.filter(m_id=hid).delete()
                 else:
                     raise Exception
-                    print("删除失败，错误信息为:",Exception)
+                    logger.debug("删除失败，错误信息为:%s" %Exception)
                     res_msg['status'] = 1
                     res_msg['err_msg'] = '请求错误'
             except Exception as e:
-                print('ERROR',e)
+                logger.error("请求异常：%s" %e)
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
         else:
@@ -152,17 +162,26 @@ def envDel(request):
 # 查询环境主信息(非ajax)
 @auth
 def envQuery(request):
+    if request.method == 'GET':
+        logger.error('不支持请求方式-->GET')
+        return redirect('/common/login')
+
     if request.method == 'POST':
         queryParam = request.POST.get('searchParam')
-        print('queryParam2',queryParam)
+        logger.debug("查询环境信息条件：%s" % queryParam)
+
+        # 获取权限
+        auth = getAuth(request.session.get('username'))
+
         if queryParam:
             try:
                 # 环境信息支持模糊查询
                 queryRes = models.EnvInfo.objects.filter(env_name__contains=queryParam).first()
-                print(queryRes)
-                return render(request, 'envQuery.html', {'queryRes': queryRes})
+                logger.debug("查询环境信息结果：%s" % queryRes)
+                return render(request, 'envQuery.html', {'queryRes':queryRes,'auth':auth})
             except Exception as e:
                 raise e
+                logger.error("查询错误：%s" %e)
         else:
             return HttpResponse('请求错误')
 
@@ -232,7 +251,7 @@ class envDetail(View):
         # 前端数据
         if self.uid == '1':
             frontService = self.getFrontService()
-            print("前端返回所有数据：",frontService)
+            logger.debug("前端返回所有数据:%s" % frontService)
 
             data,page_str = self.getPage(request,self.nid,self.uid,frontService)
             frontService = data
@@ -241,7 +260,7 @@ class envDetail(View):
         # 后端数据
         elif self.uid == '2':
             backService = self.getBackService()
-            print("后端返回所有数据：",backService)
+            logger.debug("后端返回所有数据:%s" % backService)
 
             data,page_str = self.getPage(request,self.nid,self.uid,backService)
             backService = data
@@ -250,7 +269,8 @@ class envDetail(View):
         # 中间件数据
         elif self.uid == '3':
             middleService = self.getMiddleService()
-            print("中间件返回所有数据：",middleService)
+            logger.debug("中间件返回所有数据:%s" % middleService)
+            # print("中间件返回所有数据：",middleService)
 
             data,page_str = self.getPage(request,self.nid,self.uid,middleService)
             middleService = data
@@ -259,7 +279,8 @@ class envDetail(View):
         # Ftp数据
         elif self.uid == '4':
             ftpService = self.getFtpService()
-            print("FTP返回所有数据：", ftpService)
+            logger.debug("FTP返回所有数据:%s" % ftpService)
+            # print("FTP返回所有数据：", ftpService)
 
             data,page_str = self.getPage(request,self.nid,self.uid,ftpService)
             ftpService = data
@@ -268,7 +289,8 @@ class envDetail(View):
         # 数据库数据
         elif self.uid == '5':
             dbService = self.getDbService()
-            print("数据库返回所有数据：", dbService)
+            logger.debug("数据库返回所有数据:%s" % dbService)
+            # print("数据库返回所有数据：", dbService)
 
             data,page_str = self.getPage(request,self.nid,self.uid,dbService)
             dbService = data
@@ -301,12 +323,14 @@ class envDetail(View):
         # 分页
         # 获取数据总条数
         env_count = len(node)
-        print("查询数据库信息总条数：%d" % env_count)
+        logger.debug("查询数据库信息总条数：%d" % env_count)
+        # print("查询数据库信息总条数：%d" % env_count)
 
         # 获取当前页码
         current_page = request.GET.get('p', 1)
         current_page = int(current_page)
-        print('当前页码是：%d' % current_page)
+        logger.debug('当前页码是：%d' % current_page)
+        # print('当前页码是：%d' % current_page)
 
         # 定义每页展示数据条数
         val = request.COOKIES.get('per_page_count', 8)
@@ -316,7 +340,8 @@ class envDetail(View):
         page_obj = Page(current_page, env_count, val)
 
         data = node[page_obj.start:page_obj.end]
-        print('当前页码对应的数据为：%s' % data)
+        logger.debug('当前页码对应的数据为：%s' % data)
+        # print('当前页码对应的数据为：%s' % data)
 
         page_str = page_obj.page_str("/envManage/env/detail-%s-%s" % (nid, uid))
         return data,page_str
@@ -356,6 +381,7 @@ class envDetailedit(View):
             except Exception as e:
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
+                logger.error("异常信息：%s" %e)
         else:
             res_msg['status'] = 1
             res_msg['err_msg'] = obj.errors
@@ -392,6 +418,7 @@ class dbDetailedit(View):
                     name=db_name
                 )
             except Exception as e:
+                logger.error("异常信息：%s" % e)
                 # print(e)                  #后期处理成记录到日志
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
@@ -411,21 +438,26 @@ class envDetaildel(View):
 
         hid = request.POST.get('hid')
         node = request.POST.get('node')
-        print('删除详细环境信息id为：',hid)
-        print('删除信息所属node为：', node)
+        logger.debug('删除详细环境信息id为：%s' %hid)
+        logger.debug('删除信息所属node为：%s' %node)
+
+        # print('删除详细环境信息id为：',hid)
+        # print('删除信息所属node为：', node)
         if hid:
             if node:
                 try:
                     models.EnvDetailInfo.objects.filter(s_id=hid).delete()
                 except Exception as e:
-                    print('删除失败，错误信息是', e)
+                    logger.debug('删除失败，错误信息是:%s' %e)
+                    # print('删除失败，错误信息是', e)
                     res_msg['status'] = 1
                     res_msg['err_msg'] = '请求错误'
             else:
                 try:
                     models.DbInfo.objects.filter(db_id=hid).delete()
                 except Exception as e:
-                    print('删除失败，错误信息是', e)
+                    logger.debug('删除失败，错误信息是:%s' % e)
+                    # print('删除失败，错误信息是', e)
                     res_msg['status'] = 1
                     res_msg['err_msg'] = '请求错误'
         else:
@@ -468,6 +500,7 @@ def envDetailAdd(request):
                 # print(e)                  #后期处理成记录到日志
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
+                logger.error("异常信息：%s" %e)
         else:
             res_msg['status'] = 1
             res_msg['err_msg'] = obj.errors
@@ -506,6 +539,7 @@ def dbDetailAdd(request):
                 # print(e)                  #后期处理成记录到日志
                 res_msg['status'] = 1
                 res_msg['err_msg'] = '请求错误'
+                logger.error("异常信息：%s" %e)
         else:
             res_msg['status'] = 1
             res_msg['err_msg'] = obj.errors
