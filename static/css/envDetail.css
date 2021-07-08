@@ -34,7 +34,13 @@
             height: 6%;
         }
 
-        .content_header input{
+        /*.content_header input{*/
+        /*    float: right;*/
+        /*    margin-top: 3px;*/
+        /*    margin-right: 10px;*/
+        /*}*/
+
+        .content_header button{
             float: right;
             margin-top: 3px;
             margin-right: 10px;
