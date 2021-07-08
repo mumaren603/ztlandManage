@@ -89,13 +89,13 @@
             top: 50px
         }
 
-        .login-btn input{
+        /*设置登录按钮样式*/
+        .login-btn #loginBtn{
             width: 100%;
             height:40px;
             line-height:40px;
             font-size:20px;
-            border:0;
-            background-color: blue
+            background-color: #4343f1
         }
 
         .shadow{
