@@ -17,16 +17,16 @@ class Data(View):
     def post(self, request):
         env = request.POST.get('env')
         cqmc = request.POST.get('cqmc')
-        djlx = request.POST.get('djlx')
+        sfdj = request.POST.get('sfdj')
         xzxx = request.POST.getlist('xzxx')
         sfpl = request.POST.get('sfpl')
-        logger.debug("请求参数-->所属环境：%s，所属产权：%s，登记类型：%s，是否批量：%s" %(env, cqmc, djlx, sfpl))
+        logger.debug("请求参数-->所属环境：%s，所属产权：%s，登记类型：%s，是否批量：%s" %(env, cqmc, sfdj, sfpl))
         logger.debug("请求参数-->限制信息：",xzxx)
 
         res_msg = {'status': 0, 'data': None, 'err_msg': None}
-        if env and cqmc and djlx and sfpl:
+        if env and cqmc and sfdj and sfpl:
             if cqmc == 'jd':
-                if djlx == 'dj_1':
+                if sfdj == 'dj_1':
                     if sfpl == 'y':
                         pass
                     else:
@@ -66,7 +66,7 @@ class Data(View):
                                 res_msg['err_msg'] = '选择限制信息不符合要求！'
                     pass
             elif cqmc == 'fw':
-                if djlx == 'dj_1':
+                if sfdj == 'dj_1':
                     if sfpl == 'y':
                         # 首次批量
                         queryRes = sqlQuery.sqlQuery(env).getHouseFirstPlRegisterData()
@@ -184,7 +184,7 @@ class Data(View):
                                 res_msg['err_msg'] = '选择限制信息不符合要求！'
                     pass
             elif cqmc == 'gjpt':
-                if djlx == 'dj_1':
+                if sfdj == 'dj_1':
                     if not xzxx:
                         queryRes = sqlQuery.sqlQuery(env).getGjptFirstRegisterData()
                         # 查无数据
@@ -209,7 +209,7 @@ class Data(View):
                         res_msg['status'] = 1
                         res_msg['err_msg'] = '选择限制信息不符合要求'
             elif cqmc == 'ck':
-                if djlx == 'dj_1':
+                if sfdj == 'dj_1':
                     if not xzxx:
                         queryRes = sqlQuery.sqlQuery(env).getCkFirstRegisterData()
                         # 查无数据
@@ -248,7 +248,7 @@ class Data(View):
                     queryRes = sqlQuery.sqlQuery(env).getZjgcRegisterData()
                     res_msg['data'] = queryRes
             elif cqmc == 'zjfw':
-                if djlx == 'dj_1':
+                if sfdj == 'dj_1':
                     if not xzxx:
                         queryRes = sqlQuery.sqlQuery(env).getZjfwFirstRegisterData()
                         res_msg['data'] = queryRes
@@ -259,7 +259,7 @@ class Data(View):
                     res_msg['status'] = 1
                     res_msg['err_msg'] = '选择登记类型不符合要求'
             elif cqmc == 'xmldz':
-                if djlx == 'dj_1':
+                if sfdj == 'dj_1':
                     if not xzxx:
                         queryRes = sqlQuery.sqlQuery(env).getXmldzFirstRegisterData()
                         # 查无数据
