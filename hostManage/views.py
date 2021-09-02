@@ -67,7 +67,7 @@ def hostEdit(request):
     if request.method == 'POST':
         res_msg = {'status': 0, 'err_msg': None}
 
-        # id等获取前端传来的，其余字段可以从obj校验模板获取.obj封装前端需要校验的字段
+        # id等字段获取前端传来的，其余字段可以从obj校验模板获取.obj封装前端需要校验的字段
         id = request.POST.get('s_id')
         serverPurpose = request.POST.get('serverPurpose')
         originServer = request.POST.get('originServer')
