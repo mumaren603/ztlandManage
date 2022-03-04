@@ -20,7 +20,7 @@ class Host(View):
         # 获取权限
         auth = getAuth(request.session.get('username'))
 
-
+        # 获取前端请求参数
         intranetIP = request.POST.get('intranetIP')
         extrantIP = request.POST.get('extrantIP')
         serverType = request.POST.get('serverType')
@@ -41,9 +41,10 @@ class Host(View):
         # 将查询结果加入列表 返回给前端
         if queryConditions:
             queryHostRes = models.ServerInfo.objects.filter(**queryConditions).all()
-            queryHostResToList = []
-            for i in queryHostRes:
-                data = {
+            if queryHostRes:
+                queryHostResToList = []
+                for i in queryHostRes:
+                    data = {
                     'id': i.id,
                     'intranetIP': i.intranetIP,
                     'extrantIP': i.extrantIP,
@@ -53,11 +54,12 @@ class Host(View):
                     'serverAccount': i.serverAccount,
                     'serverPassword': i.serverPassword,
                     'originServer': i.originServer
-                }
-                logger.debug("查询结果：%s" % data)
-                queryHostResToList.append(data)
-
-            return render(request,'host.html',{'queryHostResToList':queryHostResToList,'auth':auth})
+                    }
+                    logger.debug("查询结果：%s" % data)
+                    queryHostResToList.append(data)
+                return render(request, 'host.html', {'queryHostResToList': queryHostResToList, 'auth': auth})
+            else:
+                pass  # 查无数据
         else:
             logger.error("请求参数不存在！")
 

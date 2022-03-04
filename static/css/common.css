@@ -24,7 +24,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            right：0;
+            right: 0;
             width: 100%;
             height: 50px;
             background-color: rgba(161, 159, 159, 0.8);
@@ -55,15 +55,22 @@
         .pg_header .person_info{
             position: relative;
             height: 50px;
-            width: 200px;
+            width: 100px;
         }
 
-        .pg_header .person_info img{
-            width: 50px;
-            height: 50px;
-            margin-left: 75px;
-            /*使用border-radius可以定义边框的圆角程度*/
-            border-radius: 50%;
+        /*.pg_header .person_info img{*/
+        /*    width: 35px;*/
+        /*    height: 35px;*/
+        /*    margin-left: 75px;*/
+        /*    !*使用border-radius可以定义边框的圆角程度*!*/
+        /*    border-radius: 50%;*/
+        /*}*/
+
+        .logout{
+            margin-top: 10px;
+            width: 80px;
+            height: 30px;
+            text-align: center;
         }
 
         .pg_header .person_info .info{
@@ -76,16 +83,16 @@
             display: none;
         }
 
-         .pg_header .person_info .info .logout_div {
-             height:30px;
-             margin-top:50px;
-         }
+         /*.pg_header .person_info .info .logout_div {*/
+         /*    height:30px;*/
+         /*    margin-top:50px;*/
+         /*}*/
 
-        .pg_header .person_info .info .logout_div .btn1{
-            height:30px;
-            width: 50%;
-            background: dodgerblue;
-         }
+        /*.pg_header .person_info .info .logout_div .btn1{*/
+        /*    height:30px;*/
+        /*    width: 50%;*/
+        /*    background: dodgerblue;*/
+        /* }*/
 
         .pg_header .person_info .info a{
             display: block;

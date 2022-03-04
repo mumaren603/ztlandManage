@@ -8,6 +8,8 @@ urlpatterns = [
     path('env/add', views.envAdd),
     path('env/edit', views.envEdit),
     path('env/del', views.envDel),
+    path('env/exportEnv', views.envExport),
+    path('env/exportDb', views.dbExport),
     # re_path('env/detail-(?P<nid>\d+)', views.envDetail),
     re_path('env/detail-(?P<nid>\d+)-(?P<uid>\d+)', views.envDetail.as_view()),
     path('env/detail/edit', views.envDetailedit.as_view()),

@@ -45,7 +45,6 @@ function checkEnv() {
     }
 }
 
-
 /*主环境信息添加，编辑，删除*/
 //添加
 $('#addEnvInfo').click(function () {
@@ -199,6 +198,20 @@ $('#delEnvConfirmBtn').click(function () {
             }
         }
     })
+})
+
+//导出环境信息
+$('#exportEnv').click(function () {
+    console.log('导出环境信息')
+    debugger;
+    window.location.href='/envManage/env/exportEnv'
+})
+
+//导出数据库信息
+$('#exportDb').click(function () {
+    console.log('导出数据库信息')
+    debugger;
+    window.location.href='/envManage/env/exportDb'
 })
 
 
