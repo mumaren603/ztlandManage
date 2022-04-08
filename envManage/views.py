@@ -1,4 +1,6 @@
 import json
+import xlwt
+from io import BytesIO
 from django.shortcuts import render,redirect,HttpResponse
 from django.utils.decorators import method_decorator
 from envManage import models
@@ -543,104 +545,6 @@ def dbDetailAdd(request):
             res_msg['err_msg'] = obj.errors
         return HttpResponse(json.dumps(res_msg))  # string
 
-
-# 导出
-import xlwt
-from io import BytesIO
-
-# @auth
-# def envExport(request):
-#     # 设置HTTPResponse的类型
-#     response = HttpResponse(content_type='application/vnd.ms-excel')
-#     response['Content-Disposition'] = 'attachment;filename=环境信息.xls'
-#
-#     """导出excel表"""
-#     # 创建工作簿
-#     ws = xlwt.Workbook(encoding='utf-8')
-#
-#     # 设置边框样式
-#     borders = xlwt.Borders()
-#     borders.left = xlwt.Borders.THIN
-#     borders.right = xlwt.Borders.THIN
-#     borders.top = xlwt.Borders.THIN
-#     borders.bottom = xlwt.Borders.THIN
-#
-#     # 设置字体
-#     font_head = xlwt.Font()
-#     font_head.bold = True
-#     font_head.height = 300
-#
-#     font_content = xlwt.Font()
-#     font_content.height = 260
-#
-#     # 设置对齐方式
-#     alt = xlwt.Alignment()
-#     alt.horz = 0x01        # 左侧对齐
-#
-#     # 针对表头设置全局样式
-#     style = xlwt.XFStyle()
-#     style.font = font_head
-#     style.borders = borders
-#
-#     # 针对内容设置全局样式
-#     style1 = xlwt.XFStyle()
-#     style1.borders = borders
-#     style1.alignment = alt
-#     style1.font = font_content
-#
-#     # 查出主环境信息条数，每一条对应一个sheet页
-#     env_count = models.EnvInfo.objects.count()
-#
-#     # 查出具体哪些地市环境  确定对应sheet页
-#     env_info = models.EnvInfo.objects.values_list('m_id','env_name')
-#     # [(16, '3.0测试（dev）'), (4, '3.0测试（stable）'), (9, '临汾环境'), (5, '包头环境'), (3, '宜兴环境'), (1, '无锡环境'), (2, '泰州环境')]
-#     if env_info:
-#         for val in env_info:
-#             w = ws.add_sheet(val[1])
-#             # 写入表头
-#             w.write(0, 0, u'序号',style)
-#             w.write(0, 1, u'服务名',style)
-#             w.write(0, 2, u'服务标识',style)
-#             w.write(0, 3, u'IP',style)
-#             w.write(0, 4, u'端口',style)
-#             w.write(0, 5, u'节点',style)
-#             # 写入内容
-#             env_detail = models.EnvDetailInfo.objects.values_list('service_chinese_name','service_name','service_host','service_port','service_model').filter(env_sub_node_id=val[0]).order_by('service_model')
-#             # output ==> [('Nginx', 'Nginx', '172.16.17.235', 9999, '中间件'), ('redis', 'redis', '172.16.17.243', 6379, '中间件')]
-#             # 行号
-#             row_num = 1
-#             # 序号
-#             order_num = 1
-#             for row in env_detail:
-#                 w.write(row_num, 0, order_num, style1)
-#                 w.write(row_num, 1, row[0], style1)
-#                 w.write(row_num, 2, row[1], style1)
-#                 w.write(row_num, 3, row[2], style1)
-#                 w.write(row_num, 4, row[3], style1)
-#                 w.write(row_num, 5, row[4], style1)
-#                 row_num += 1
-#                 order_num += 1
-#
-#             # 设置EXCEL单元格样式（主要是长宽高）
-#             for i in range(6):
-#                 col_set = w.col(i)
-#                 if i == 0:   # 序号 宽度设置偏小  其他单元格格式宽度一致
-#                     col_set.width = 256 * 8
-#                 else:
-#                     col_set.width = 256 * 18
-#             # tall_style = xlwt.easyxf('font:height 360;')  # 36pt,类型小初的字号
-#             # for row in range(len(env_detail)):
-#             #     row_set = w.row(row)
-#             #     row_set.set_style(tall_style)
-#         ws.save('环境信息.xls')
-#         # 写出到IO
-#         output = BytesIO()
-#         ws.save(output)
-#         # 重新定位到开始
-#         output.seek(0)
-#         response.write(output.getvalue())
-#     return response
-
 # 导出环境信息
 @auth
 def envExport(request):
@@ -697,7 +601,7 @@ def envExport(request):
                 else:
                     col_set.width = 256 * 18
 
-        ws.save('环境信息.xls')
+        # ws.save('环境信息.xls')
         # 写出到IO
         output = BytesIO()
         ws.save(output)
@@ -712,7 +616,6 @@ def dbExport(request):
     # 设置HTTPResponse的类型
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment;filename=数据库信息.xls'
-
     """导出excel表"""
     # 创建工作簿
     ws = xlwt.Workbook(encoding='utf-8')
@@ -759,8 +662,6 @@ def dbExport(request):
                     col_set.width = 256 * 8
                 else:
                     col_set.width = 256 * 18
-
-        ws.save('数据库信息.xls')
         # 写出到IO
         output = BytesIO()
         ws.save(output)

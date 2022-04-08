@@ -205,4 +205,12 @@ $('#delHostConfirmBtn').click(function () {
     })
 })
 
+//导出
+$('#exportHost').click(function () {
+    console.log('导出主机信息')
+    debugger;
+    window.location.href='/hostManage/host/export'
+})
+
+
 
