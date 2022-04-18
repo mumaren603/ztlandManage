@@ -44,6 +44,9 @@
             float: right;
             margin-top: 3px;
             margin-right: 10px;
+            width:110px;
+            height:20px;
+            background-color: cornflowerblue;
         }
 
         .content_body .head .menu_item{
