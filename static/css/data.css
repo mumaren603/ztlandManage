@@ -39,17 +39,15 @@
 
     /*查询按钮置蓝色，默认*/
     .queryBtn{
-        float:right;
         height:30px;
-        width:100px;
+        width:80px;
         background-color: cornflowerblue;
     }
 
     /*查询按钮置灰色*/
     .queryBtn2{
-        float:right;
         height:30px;
-        width:100px;
+        width:80px;
         background-color: #b0b0b1
     }
 
@@ -160,6 +158,10 @@
 
     table thead{
         background-color: #f8f8f9;
+    }
+
+    table tr input{
+        width: 16px;height: 16px;
     }
 
     td{
