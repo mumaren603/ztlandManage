@@ -9,6 +9,13 @@
         <div class="queryCondition">
             <form id="queryForm">
             <table>
+{#                <tr>#}
+{#                    <td>平台版本：</td>#}
+{#                    <td style="float: left">#}
+{#                        <input type="radio" name="ptbb" value="v-2" checked="checked">v2.0#}
+{#                        <input type="radio" name="ptbb" value="v-3">v3.0#}
+{#                    </td>#}
+{#                </tr>#}
                 <tr>
                     <td style="width: 10%">所属环境：</td>
                     <td style="float: left">
@@ -25,46 +32,38 @@
                 <tr>
                     <td>所属产权：</td>
                     <td style="float: left">
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="jd">净地
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="fw" checked="checked">房地
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="gjpt">公建配套
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="zjgc">在建工程
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="zjfw">自建房屋
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="ck">车库
-                        <input style="width: 20px;height: 20px;" type="radio" name="cqmc" value="xmldz">项目类多幢
+                        <input type="radio" name="cqmc" value="jd">净地
+                        <input type="radio" name="cqmc" value="fw" checked="checked">房地
+                        <input type="radio" name="cqmc" value="gjpt">公建配套
+                        <input type="radio" name="cqmc" value="zjgc">在建工程
+                        <input type="radio" name="cqmc" value="zjfw">自建房屋
+                        <input type="radio" name="cqmc" value="ck">车库
+                        <input type="radio" name="cqmc" value="xmldz">项目类多幢
                     </td>
                 </tr>
                 <tr>
                     <td>是否登记：</td>
                     <td style="float: left">
-                        <input style="width: 20px;height: 20px; " type="radio" name="sfdj" value="dj_1">未登记
-                        <input style="width: 20px;height: 20px; " type="radio" name="sfdj" value="dj_2"
-                               checked="checked">已登记
+                        <input type="radio" name="sfdj" value="dj_1">未登记
+                        <input type="radio" name="sfdj" value="dj_2" checked="checked">已登记
                     </td>
                 </tr>
                 <tr>
-                    <td>限制信息：</td>
+                    <td>附属属性：</td>
                     <td style="float: left">
-                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
-                               value="sfdy">抵押
-                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
-                               value="sfcf">查封
-                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
-                               value="sfyg">预告
-                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
-                               value="sfyy">异议
-                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
-                               value="sfydy">预抵押
-                        <input style="width: 20px;height: 20px;" class="checkbox" type="checkbox" name="xzxx"
-                               value="sfycf">预查封
+                        <input class="checkbox" type="checkbox" name="xzxx" value="sfdy">抵押
+                        <input class="checkbox" type="checkbox" name="xzxx" value="sfcf">查封
+                        <input class="checkbox" type="checkbox" name="xzxx" value="sfyg">预告
+                        <input class="checkbox" type="checkbox" name="xzxx" value="sfyy">异议
+                        <input class="checkbox" type="checkbox" name="xzxx" value="sfydy">预抵押
+                        <input class="checkbox" type="checkbox" name="xzxx" value="sfycf">预查封
                     </td>
                 </tr>
                 <tr>
                     <td>是否批量：</td>
                     <td style="float: left">
-                        <input style="width: 20px;height: 20px; " type="radio" name="sfpl" value="y">是
-                        <input style="width: 20px;height: 20px; " type="radio" name="sfpl" value="n"
-                               checked="checked">否
+                        <input type="radio" name="sfpl" value="y">是
+                        <input type="radio" name="sfpl" value="n" checked="checked">否
                     </td>
                 </tr>
                 <tr>
@@ -77,7 +76,7 @@
         </div>
         <div class="tips2">
              <p>友情提示：</p>
-             <p>限制信息选项是针对已登记数据，勾选该条件代表查询的产权已具备某种限制状态。</p>
+             <p>附属属性选项是针对已登记数据，勾选该条件代表查询的产权上存在该附属属性。</p>
         </div>
 
         <!--遮罩层-->
